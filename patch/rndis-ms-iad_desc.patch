@@ -1,0 +1,36 @@
+diff --git a/drivers/usb/gadget/function/f_rndis.c b/drivers/usb/gadget/function/f_rndis.c
+index ee95e8f5f..d23eca221 100644
+--- a/drivers/usb/gadget/function/f_rndis.c
++++ b/drivers/usb/gadget/function/f_rndis.c
+@@ -115,9 +115,15 @@ static struct usb_interface_descriptor rndis_control_intf = {
+ 	/* .bInterfaceNumber = DYNAMIC */
+ 	/* status endpoint is optional; this could be patched later */
+ 	.bNumEndpoints =	1,
+-	.bInterfaceClass =	USB_CLASS_COMM,
+-	.bInterfaceSubClass =   USB_CDC_SUBCLASS_ACM,
+-	.bInterfaceProtocol =   USB_CDC_ACM_PROTO_VENDOR,
++	/* RNDIS 控制接口按微软白皮书写成 Wireless Controller (0xE0/01/03),
++	 * 与 Android 手机(如 OPPO 22d9:2766)一致 —— Windows 老 INF
++	 * (usb8023 "Remote NDIS based Internet Sharing Device") 按
++	 * USB\Class_E0&SubClass_01&Prot_03 匹配;原 ACM 伪装(0x02/02/FF)
++	 * 无系统 INF 匹配,只能靠 MS OS compat,Win7 + ICS 下蓝屏(0xD1)。
++	 * Linux host 的 rndis_host id_table 同时收 0xE0/01/03 与 0x02/02/FF。 */
++	.bInterfaceClass =	USB_CLASS_WIRELESS_CONTROLLER,
++	.bInterfaceSubClass =	1,
++	.bInterfaceProtocol =	3,
+ 	/* .iInterface = DYNAMIC */
+ };
+ 
+@@ -176,9 +182,9 @@ rndis_iad_descriptor = {
+ 
+ 	.bFirstInterface =	0, /* XXX, hardcoded */
+ 	.bInterfaceCount = 	2,	// control + data
+-	.bFunctionClass =	USB_CLASS_COMM,
+-	.bFunctionSubClass =	USB_CDC_SUBCLASS_ETHERNET,
+-	.bFunctionProtocol =	USB_CDC_PROTO_NONE,
++	.bFunctionClass =	USB_CLASS_WIRELESS_CONTROLLER,
++	.bFunctionSubClass =	1,
++	.bFunctionProtocol =	3,
+ 	/* .iFunction = DYNAMIC */
+ };
+ 
