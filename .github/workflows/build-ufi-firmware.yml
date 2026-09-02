@@ -11,6 +11,8 @@
 # 注意:
 #   * 教程用的 ubuntu-20.04 runner 已被 GitHub 移除,这里用 ubuntu-22.04
 #     (交叉编译器 gcc-11;本内核 5.15 可正常编译)
+#   * jammy 仓库无 kernel-package(make-kpkg),安装步骤会从 Ubuntu archive
+#     pool 直接下载其纯脚本 deb 安装,教程的 make-kpkg 流程不变
 #   * OpenStick 官方 arm64 固件即纯 msm8916_defconfig 构建(.drone.sh),
 #     defconfig 内已含 CONFIG_LOCALVERSION="-handsomekernel" 等设备定制,
 #     arch/arm/configs/msm8916_defconfig.part 是 ARM32 专用片段,不适用
@@ -77,14 +79,25 @@ jobs:
           fetch-depth: 1
 
       - name: 安装依赖
+        shell: bash
         run: |
           sudo apt-get update
           sudo apt-get install -y --no-install-recommends \
             bison flex bc pkg-config libncurses-dev libssl-dev \
-            gcc-aarch64-linux-gnu \
-            kernel-package fakeroot \
+            gcc-aarch64-linux-gnu fakeroot \
             android-sdk-libsparse-utils mkbootimg \
             qemu-user-static binfmt-support unzip
+          # kernel-package 在 jammy 仓库已被移除(教程基于 20.04 的 make-kpkg),
+          # 直接从 Ubuntu archive pool 安装其纯脚本包(Architecture: all,
+          # 依赖 build-essential/po-debconf/xmlto 等,均由 jammy 源解析提供)
+          kpkg_deb=$(curl -fsSL --max-time 30 \
+              http://archive.ubuntu.com/ubuntu/pool/universe/k/kernel-package/ \
+            | grep -oE 'kernel-package_[0-9][^"]*_all\.deb' | sort -V | tail -1)
+          [ -n "$kpkg_deb" ] || { echo "::error::archive pool 中找不到 kernel-package"; exit 1; }
+          curl -fsSL --max-time 60 -o /tmp/kpkg.deb \
+            "http://archive.ubuntu.com/ubuntu/pool/universe/k/kernel-package/$kpkg_deb"
+          sudo apt-get install -y --no-install-recommends /tmp/kpkg.deb
+          command -v make-kpkg || { echo "::error::kernel-package 安装失败"; exit 1; }
           # 注册 aarch64 binfmt(qemu chroot 用),两种注册方式择一即可
           sudo update-binfmts --enable qemu-aarch64 2>/dev/null || \
             sudo systemctl restart systemd-binfmt || true
