@@ -2,7 +2,8 @@
 #
 # 对应教程:workspace/编译UFI设备的Debian固件 _ 宁宁's Blog.html
 # 流程:checkout 本内核源码 → (可选)应用 patch/rndis-ms-iad_desc.patch →
-#       msm8916_defconfig(+可选额外 CONFIG)交叉编译 → make-kpkg 打包 deb →
+#       内核配置(默认 kernel-rebuild.config,可切 msm8916_defconfig,
+#       +可选额外 CONFIG)交叉编译 → make-kpkg 打包 deb →
 #       下载 OpenStick 底包 debian.zip → simg2img + qemu chroot 装入新内核、
 #       生成匹配的 initrd → 取出 initrd → cat Image.gz+dtb 并用 mkbootimg
 #       合成 <device>-boot.img → 上传 deb / Image.gz / dtb / boot.img
@@ -13,8 +14,13 @@
 #   * OpenStick 官方 arm64 固件即纯 msm8916_defconfig 构建(.drone.sh),
 #     defconfig 内已含 CONFIG_LOCALVERSION="-handsomekernel" 等设备定制,
 #     arch/arm/configs/msm8916_defconfig.part 是 ARM32 专用片段,不适用
-#   * 本 workflow 不重新打包 rootfs.img(用户可另选范围),底包只用于
-#     chroot 安装内核以生成与内核匹配的 initrd
+#   * 默认使用仓库根目录 kernel-rebuild.config —— 从本地成功构建导出的完整
+#     .config(等价于 defconfig + menuconfig 手工改动,额外启用了 CAN/USB serial
+#     等;CONFIG_LOCALVERSION="-handsomekernel-dezigenb-rebuild"),构建时经
+#     olddefconfig 用当前工具链(gcc-11)重新解析;如需改回纯 defconfig 关掉
+#     use_rebuild_config 输入即可
+#   * 本 workflow 不重新打包 rootfs.img,底包只用于 chroot 安装内核以生成
+#     与内核匹配的 initrd
 #   * 内核对 rootfs 的挂载参数沿用教程(四个设备通用同一 cmdline)
 
 name: Build UFI firmware (kernel + boot)
@@ -35,8 +41,12 @@ on:
         description: 构建前对源码应用 patch/rndis-ms-iad_desc.patch(将 RNDIS 控制接口枚举改为微软规范的 Wireless Controller 0xE0/01/03)
         type: boolean
         default: true
+      use_rebuild_config:
+        description: 使用仓库根目录 kernel-rebuild.config(本地成功构建导出的完整 .config,含 CAN/USB serial 等扩展);关闭则退化为纯 msm8916_defconfig
+        type: boolean
+        default: true
       extra_config:
-        description: 额外的内核配置,每行一个 CONFIG_*,如 CONFIG_USB_CONFIGFS_F_FS=y;留空则纯 msm8916_defconfig
+        description: 额外的内核配置,每行一个 CONFIG_*(叠加在当前所选配置之上),如 CONFIG_USB_CONFIGFS_F_FS=y;留空则不追加
         type: string
         default: ''
       cmdline:
@@ -47,8 +57,6 @@ on:
 env:
   ARCH: arm64
   CROSS_COMPILE: aarch64-linux-gnu-
-  # OpenStick defconfig 固定了版本号(arch/arm64/configs/msm8916_defconfig)
-  KREL: 5.15.0-handsomekernel
 
 concurrency:
   group: build-ufi-${{ inputs.device }}
@@ -86,9 +94,19 @@ jobs:
         run: git apply patch/rndis-ms-iad_desc.patch
 
       - name: 内核基础配置
+        shell: bash
         run: |
-          make msm8916_defconfig
-          make kernelrelease
+          if [ "${{ inputs.use_rebuild_config }}" = "true" ]; then
+            # 完整 .config 已含 defconfig 的全部内容,olddefconfig 负责用当前
+            # 工具链(gcc-11)重排并刷新编译器相关探测项
+            cp kernel-rebuild.config .config
+            make olddefconfig
+          else
+            make msm8916_defconfig
+          fi
+          # 版本号随配置而定: 5.15.0-handsomekernel 或
+          # 5.15.0-handsomekernel-dezigenb-rebuild,供后续步骤取 initrd/deb
+          echo "KREL=$(make -s kernelrelease)" >> "$GITHUB_ENV"
 
       - name: 追加用户提供的额外 CONFIG
         if: ${{ inputs.extra_config != '' }}
