@@ -23,7 +23,7 @@
 
 		reset {
 			label = "Restart";
-			gpios = <&msmgpio 37 GPIO_ACTIVE_LOW>;
+			gpios = <&msmgpio 37 GPIO_ACTIVE_HIGH>;
 			linux,code = <KEY_RESTART>;
 		};
 	};
