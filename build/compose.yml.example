@@ -1,0 +1,87 @@
+# UFI device kernel builder -- compose example.
+#
+# Usage (copy to compose.yml first):
+#   cp compose.yml.example compose.yml
+#
+#   Full one-shot build (artifacts land in ./dist):
+#     sudo docker compose run --build --rm ufi-build
+#     --build rebuilds the image first (cheap, few Dockerfile steps) so the
+#     latest build.sh is always in use; kernel-rebuild.config, patch/ and
+#     the env vars below are picked up at container start, so edits to them
+#     never require anything but this same command
+#
+#   Interactive shell only (for manual `make menuconfig` etc.):
+#     sudo docker compose run --build --rm ufi-build bash
+#
+# Optional env vars (set below, in a host .env file, or via compose
+# environment overrides):
+#   APT_SOURCE               mirror for the regular archive: a bare host
+#                            (mirrors.nju.edu.cn) or a full base URL
+#                            (http://mirrors.aliyun.com/ubuntu);
+#                            empty = official archive. The toolchain is
+#                            installed at container start by build.sh, so
+#                            this mirror also covers those downloads (slow
+#                            in mainland China otherwise)
+#   APT_SECURITY_SOURCE      mirror for the security-updates suite, full
+#                            URL; empty = same mirror as APT_SOURCE (merged
+#                            layout). No auto-detection: mirrors that serve
+#                            focal-security from a separate /ubuntu-security
+#                            (USTC, TUNA, ...) must set this explicitly, or
+#                            apt-get update fails on that suite
+#   ENABLE_APT_SRC           write active deb-src (source) lines into
+#                            sources.list: true / false (default, commented)
+#   DEVICE                   target device: ufi001c (default) / ufi001b /
+#                            sp970 / uz801
+#   ENABLE_RNDIS_MS_IAD      apply the RNDIS MS IAD patch:
+#                            true (default) / false
+#   USE_REBUILD_CONFIG       build with the repo-root kernel-rebuild.config:
+#                            true (default, auto-falls back to defconfig when
+#                            the file is missing) / false
+#   EXTRA_CONFIG             extra kernel config entries, space separated,
+#                            e.g. "CONFIG_FOO=y CONFIG_BAR=m"
+#   FULL_REBUILD             wipe the kernel build tree before building
+#                            (full clean compile): true / false (default)
+#   BASE_URL                 OpenStick base pack URL (default GitHub v1
+#                            debian.zip)
+#
+# Notes: qemu chroot needs mount permission, so privileged: true is
+# required; the source is mounted read-only and the build runs on an
+# in-container copy, so the host repo is never dirtied.
+#
+# A fresh `docker compose run --rm` reinstalls the toolchain every time;
+# to keep one container around (install once, then iterate), see
+# build/README.md "iterate" section (uses `build.sh wait`).
+
+services:
+  ufi-build:
+    build: .
+    container_name: wifi-stick-linux_build
+    # use the host network so downloads/mirrors go out through the host's
+    # connection (no NAT); compose-level networks are then not used
+    network_mode: host
+    privileged: true
+    restart: "no"
+    environment:
+      APT_SOURCE: ""
+      APT_SECURITY_SOURCE: ""
+      ENABLE_APT_SRC: "false"
+      DEVICE: ufi001c
+      ENABLE_RNDIS_MS_IAD: "true"
+      USE_REBUILD_CONFIG: "true"
+      EXTRA_CONFIG: ""
+      FULL_REBUILD: "false"
+      # BASE_URL: "https://github.com/OpenStick/OpenStick/releases/download/v1/debian.zip"
+    volumes:
+      # repo root -> /source (read-only; edit files on the host instead)
+      - ../:/source:ro
+      # artifacts -> ./dist (the in-container output path is always /dist)
+      - ./dist:/dist
+      # kernel build tree: survives between runs, so make only recompiles
+      # what changed (wipe with FULL_REBUILD=true)
+      - ufi-build-src:/build/src
+      # base-pack cache (376 MB, avoids re-downloading every run)
+      - ufi-build-cache:/build/cache
+
+volumes:
+  ufi-build-src:
+  ufi-build-cache:
