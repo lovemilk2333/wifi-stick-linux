@@ -108,3 +108,83 @@ Notes:
   in-container copy, so the host repo stays clean.
 - `kernel-rebuild.config` at the repo root must exist (or be committed) for
   the default config path.
+
+## Artifacts & flashing
+
+### Artifacts in build/dist
+
+| file                     | what it is                                    | needed to swap the kernel? |
+| ------------------------ | --------------------------------------------- | -------------------------- |
+| `<device>-boot.img`      | kernel + dtb + matching initrd, already       | **yes, this is the one**   |
+|                          | assembled for mkbootimg                       |                            |
+| `linux-image-*.deb`      | kernel deb incl. all `/lib/modules/<ver>`     | recommended (see below)    |
+| `linux-headers-*.deb`    | headers for building out-of-tree modules      | only if you build modules  |
+| `initrd.img` / `Image.gz` / `*.dtb` | raw parts of the boot.img        | no (only to re-assemble)   |
+| `kernelrelease.txt`      | kernel release string (e.g.                   | reference only             |
+|                          | `5.15.0-handsomekernel-dezigenb-rebuild`)     |                            |
+
+### Fresh device (from stock/Android firmware)
+
+> **Back up first.** Enter EDL/9008 mode (hold the reset button while
+> plugging in USB, or `adb reboot edl` once adb works) and dump the whole
+> eMMC with <https://github.com/bkerler/edl>:
+> `edl rl dumps-ufi001c --genxml` (restore with `edl qfil ...`).
+
+1. From <https://github.com/OpenStick/OpenStick/releases> take `base.zip`
+   and `debian.zip`.
+2. Unzip `debian.zip`, then **copy our `build/dist/<device>-boot.img` over
+   its `boot.img`** (rename it) -- it carries the freshly built kernel.
+3. Boot the device into fastboot (`adb reboot bootloader`), run
+   `base`/`flash.sh` (Windows: `flash.bat`), then `debian`/`flash.sh`.
+   The device reboots into Debian (SSH root@192.168.68.1).
+
+### Kernel-only replacement on an already-flashed device
+
+The rootfs does NOT need touching: `<device>-boot.img` already contains the
+new kernel, the device dtb and a matching initrd. Flash just the boot
+partition:
+
+```sh
+# copy the image to the running device (root password is `1` on stock)
+adb push ufi001c-boot.img /root/          # or scp to 192.168.68.1
+
+# route A: fastboot
+adb reboot bootloader
+fastboot flash boot ufi001c-boot.img
+fastboot reboot
+
+# route B: dd from the running Debian (check the partition name first)
+lsblk -o NAME,SIZE,PARTLABEL              # pick PARTLABEL=boot
+dd if=/root/ufi001c-boot.img of=/dev/disk/by-partlabel/boot bs=4M conv=fsync
+reboot
+
+# verify
+uname -r      # -> 5.15.0-handsomekernel-dezigenb-rebuild
+```
+
+### Matching loadable modules (recommended)
+
+The initrd inside boot.img only carries the modules needed to boot. Once
+the system runs, `modprobe` looks in the rootfs at
+`/lib/modules/$(uname -r)/` -- which still holds the *stock* kernel's
+modules if the rootfs was never touched. Modules built as `=m` (crypto,
+nftables, ...) would then fail to load.
+
+Install the image deb into the rootfs once (on the device, or via the
+chroot flow): this lays down `/lib/modules/<ver>`, runs depmod and
+generates a new initrd. No need to re-flash afterwards -- the boot
+partition already boots the new kernel:
+
+```sh
+dpkg -i linux-image-5.15.0-handsomekernel-dezigenb-rebuild_*.deb
+```
+
+`linux-headers-*.deb` is only required to compile out-of-tree modules.
+
+### Clean rebuilds
+
+- Recompile from scratch but keep the 376 MB base pack cached:
+  `sudo docker compose run --build --rm -e FULL_REBUILD=true ufi-build`
+- Wipe every cache (build tree, base pack, checkpoint) and start from
+  zero: `sudo docker compose down -v`, optionally
+  `sudo docker rmi build-ufi-build`, then the normal build command.

@@ -95,6 +95,7 @@ SRC_COPY="$BUILD/src"       # kernel source copy in a named volume: the build
                             # tree survives between runs and make rebuilds
                             # only what changed (FULL_REBUILD=true to wipe)
 CACHE="$BUILD/cache"        # base-pack cache (named volume, reused across runs)
+CHECKPOINT="$CACHE/checkpoint"  # build checkpoint saved before the base-pack stage
 STAGE="$BUILD/stage"        # staging dir for assembling the boot image
 OUT=/dist                   # artifact output dir (mounted to host build/dist)
 
@@ -138,11 +139,15 @@ free -h | head -2
 # overlay-sync /source onto the preserved build tree (tar keeps file mtimes,
 # so make only recompiles what actually changed); FULL_REBUILD=true wipes it
 rm -rf "$STAGE"
-if [ "${FULL_REBUILD:-false}" = "true" ]; then
-  log "FULL_REBUILD=true, wiping $SRC_COPY"
-  rm -rf "$SRC_COPY"
-fi
 mkdir -p "$SRC_COPY" "$STAGE" "$CACHE" "$OUT"
+if [ "${FULL_REBUILD:-false}" = "true" ]; then
+  log "FULL_REBUILD=true: wiping the build tree and the checkpoint"
+  # /build/src is a volume mount point: clear its contents, never remove
+  # the mount point itself (rm -rf on it fails with "Device or resource busy")
+  find "$SRC_COPY" -mindepth 1 -delete \
+    || die "could not wipe $SRC_COPY -- clear the volume with: docker compose down -v"
+  rm -rf "$CHECKPOINT" 2>/dev/null || true
+fi
 log "syncing kernel source (/source -> $SRC_COPY, excluding .git/build/workspace)"
 tar -C "$SRC" --exclude=.git --exclude=build --exclude=workspace -cf - . \
   | tar -C "$SRC_COPY" -xf -
@@ -198,7 +203,6 @@ fi
 # --- 5+6. kernel build + debs, possibly served from a checkpoint ---------------
 # checkpoint = compiled kernel + debs stored BEFORE the base-pack stage, so a
 # rerun that failed later (download/chroot/...) skips the compile entirely
-CHECKPOINT="$CACHE/checkpoint"
 FPRINT="$( { printf '%s\n' "$DEVICE" "$ENABLE_RNDIS_MS_IAD" "$EXTRA_CONFIG"; \
              if [ "$USE_REBUILD_CONFIG" = "true" ] && [ -f "$SRC/kernel-rebuild.config" ]; then \
                sha256sum "$SRC/kernel-rebuild.config"; else echo "defconfig"; fi; \
