@@ -1,0 +1,264 @@
+name: Build OpenStick kernel images
+
+on:
+  workflow_dispatch:
+    inputs:
+      root_password:
+        description: Root password for the generated rootfs
+        required: true
+        default: "12345678"
+        type: string
+      localversion:
+        description: CONFIG_LOCALVERSION value, including a leading hyphen when wanted
+        required: true
+        default: -handsomekernel-dezigenb-rebuild
+        type: string
+      clean_build:
+        description: Delete the matching ccache entry and compile from scratch
+        required: true
+        default: false
+        type: boolean
+      region:
+        description: Target locale and timezone
+        required: true
+        default: shanghai
+        type: choice
+        options:
+          - shanghai
+          - hong_kong
+      apt_mirror:
+        description: Debian mirror URL, without the distribution path
+        required: true
+        default: https://mirror.nju.edu.cn/debian
+        type: string
+      upload_deb:
+        description: Upload the built Linux Debian packages as a separate artifact
+        required: true
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
+      ARCH: arm64
+      CROSS_COMPILE: aarch64-linux-gnu-
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 1500M
+      DEBIAN_FRONTEND: noninteractive
+      ROOTFS_URL: https://github.com/OpenStick/OpenStick/releases/download/v1/debian.zip
+    steps:
+      - name: Check out kernel source
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 1
+
+      - name: Calculate compiler cache key
+        id: cache-key
+        env:
+          LOCALVERSION: ${{ inputs.localversion }}
+        run: |
+          set -euo pipefail
+          printf '%s' "$LOCALVERSION" | sha256sum | cut -d ' ' -f 1 > .localversion-cache-hash
+          echo "value=ccache-Linux-arm64-$(cat .localversion-cache-hash)-$(sha256sum kernel-ci/msm8916.config Makefile Kconfig | sha256sum | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Clear compiler cache
+        if: inputs.clean_build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh cache delete "${{ steps.cache-key.outputs.value }}" --repo "$GITHUB_REPOSITORY" --confirm || true
+
+      - name: Restore compiler cache
+        if: ${{ !inputs.clean_build }}
+        id: cache-restore
+        uses: actions/cache/restore@v5
+        with:
+          path: .ccache
+          key: ${{ steps.cache-key.outputs.value }}
+          restore-keys: |
+            ccache-Linux-arm64-
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            binfmt-support qemu-user-static gcc-aarch64-linux-gnu ccache \
+            fakeroot android-sdk-libsparse-utils bison flex pkg-config \
+            libncurses-dev libssl-dev libelf-dev bc unzip git make dpkg-dev build-essential \
+            curl ca-certificates
+
+      - name: Configure kernel
+        env:
+          LOCALVERSION: ${{ inputs.localversion }}
+        run: |
+          set -euxo pipefail
+          [[ "$LOCALVERSION" =~ ^[A-Za-z0-9._+-]*$ ]] || {
+            echo "CONFIG_LOCALVERSION may contain only letters, digits, ., _, +, and -" >&2
+            exit 1
+          }
+          cp kernel-ci/msm8916.config .config
+          sed -i "s/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=\"$LOCALVERSION\"/" .config
+          make olddefconfig
+          ccache --zero-stats
+
+      - name: Build kernel and Debian packages
+        run: |
+          set -euxo pipefail
+          make -j"$(nproc)" CC="ccache ${CROSS_COMPILE}gcc" dtbs
+          make -j"$(nproc)" CC="ccache ${CROSS_COMPILE}gcc" Image.gz
+          KDEB_COMPRESS=xz make -j"$(nproc)" CC="ccache ${CROSS_COMPILE}gcc" bindeb-pkg
+          ccache --show-stats
+
+      - name: Download and prepare OpenStick root filesystem
+        run: |
+          set -euxo pipefail
+          mkdir -p rootfs temp packages
+          curl --fail --location --retry 3 --output rootfs/debian.zip "$ROOTFS_URL"
+          unzip -q rootfs/debian.zip -d rootfs
+          if [ -d rootfs/debian ]; then mv rootfs/debian/* rootfs/; rmdir rootfs/debian; fi
+          simg2img rootfs/rootfs.img rootfs/root.img
+          sudo mount -o loop rootfs/root.img /mnt
+          sudo mount --bind /proc /mnt/proc
+          sudo mount --bind /dev /mnt/dev
+          sudo mount --bind /dev/pts /mnt/dev/pts
+          sudo mount --bind /sys /mnt/sys
+          # The arm64 package configuration runs under QEMU through binfmt_misc.
+          sudo cp /usr/bin/qemu-aarch64-static /mnt/usr/bin/
+          sudo cp -L /etc/resolv.conf /mnt/etc/resolv.conf
+          cp ../linux-image-5.15.0-*.deb ../linux-headers-5.15.0-*.deb packages/
+          sudo cp packages/*.deb /mnt/
+
+      - name: Install kernel packages into root filesystem
+        env:
+          APT_MIRROR: ${{ inputs.apt_mirror }}
+          REGION: ${{ inputs.region }}
+        run: |
+          set -euxo pipefail
+          sudo install -m 0755 kernel-ci/configure-rootfs.sh /mnt/configure-rootfs.sh
+          sudo chroot /mnt /bin/sh -eux /configure-rootfs.sh "$APT_MIRROR" "$REGION"
+          sudo rm /mnt/configure-rootfs.sh
+
+      - name: Set root password
+        env:
+          ROOT_PASSWORD: ${{ inputs.root_password }}
+        run: |
+          set -euo pipefail
+          test -n "$ROOT_PASSWORD"
+          echo "::add-mask::$ROOT_PASSWORD"
+          printf 'root:%s\n' "$ROOT_PASSWORD" | sudo chroot /mnt chpasswd
+
+      - name: Create boot images for all devices
+        run: |
+          set -euxo pipefail
+          cleanup() {
+            sync
+            sudo umount /mnt/proc || true
+            sudo umount /mnt/dev/pts || true
+            sudo umount /mnt/dev || true
+            sudo umount /mnt/sys || true
+            sudo umount /mnt || true
+          }
+          trap cleanup EXIT
+          sudo cp /mnt/boot/initrd.img* temp/initrd.img
+          cleanup
+          trap - EXIT
+          img2simg rootfs/root.img rootfs/rootfs.img
+          curl --fail --location --retry 3 \
+            https://raw.githubusercontent.com/anestisb/android-unpackbootimg/master/mkbootimg.py \
+            -o mkbootimg.py
+          chmod +x mkbootimg.py
+          mkdir -p output/boot output/rootfs output/deb
+          mv rootfs/rootfs.img output/rootfs/rootfs.img
+          sha256sum output/rootfs/rootfs.img > output/rootfs/SHA256SUMS
+          for device in sp970 ufi001b ufi001c uz801; do
+            device_output="output/boot/${device}"
+            mkdir -p "$device_output"
+            cat arch/arm64/boot/Image.gz \
+              "arch/arm64/boot/dts/qcom/msm8916-handsome-openstick-${device}.dtb" \
+              > "$device_output/${device}-kernel-dtb"
+            python3 mkbootimg.py \
+              --base 0x80000000 \
+              --kernel_offset 0x00080000 \
+              --ramdisk_offset 0x02000000 \
+              --tags_offset 0x01e00000 \
+              --pagesize 2048 \
+              --second_offset 0x00f00000 \
+              --ramdisk temp/initrd.img \
+              --cmdline "earlycon root=PARTUUID=a7ab80e8-e9d1-e8cd-f157-93f69b1d141e console=ttyMSM0,115200 no_framebuffer=true rw" \
+              --kernel "$device_output/${device}-kernel-dtb" \
+              -o "$device_output/${device}-boot.img"
+            rm "$device_output/${device}-kernel-dtb"
+            cp arch/arm64/boot/Image.gz "$device_output/Image.gz"
+            cp temp/initrd.img "$device_output/initrd.img"
+            cp "arch/arm64/boot/dts/qcom/msm8916-handsome-openstick-${device}.dtb" "$device_output/"
+            (cd "$device_output" && sha256sum * > SHA256SUMS)
+          done
+          cp ../linux-image-5.15.0-*.deb ../linux-headers-5.15.0-*.deb output/deb/
+          (cd output/deb && sha256sum * > SHA256SUMS)
+
+      - name: Upload SP970 kernel image
+        uses: actions/upload-artifact@v5
+        with:
+          name: sp970-boot-${{ github.sha }}
+          path: output/boot/sp970/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload UFI001B kernel image
+        uses: actions/upload-artifact@v5
+        with:
+          name: ufi001b-boot-${{ github.sha }}
+          path: output/boot/ufi001b/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload UFI001C kernel image
+        uses: actions/upload-artifact@v5
+        with:
+          name: ufi001c-boot-${{ github.sha }}
+          path: output/boot/ufi001c/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload UZ801 kernel image
+        uses: actions/upload-artifact@v5
+        with:
+          name: uz801-boot-${{ github.sha }}
+          path: output/boot/uz801/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload Debian kernel packages
+        if: inputs.upload_deb
+        uses: actions/upload-artifact@v5
+        with:
+          name: deb-packages-${{ github.sha }}
+          path: output/deb/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Save compiler cache
+        if: ${{ !cancelled() && steps.cache-restore.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v5
+        with:
+          path: .ccache
+          key: ${{ steps.cache-key.outputs.value }}
+
+      - name: Upload root filesystem image
+        uses: actions/upload-artifact@v5
+        with:
+          name: rootfs-${{ github.sha }}
+          path: output/rootfs/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
