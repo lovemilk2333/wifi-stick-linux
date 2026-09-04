@@ -23,8 +23,9 @@
 
 		reset {
 			label = "Restart";
-			gpios = <&msmgpio 37 GPIO_ACTIVE_LOW>;
+			gpios = <&msmgpio 37 GPIO_ACTIVE_HIGH>;
 			linux,code = <KEY_RESTART>;
+                        debounce-interval = <60>;
 		};
 	};
 
@@ -96,6 +97,6 @@
 
 		drive-strength = <8>;
 		input-enable;
-		bias-pull-up;
+		bias-pull-down;
 	};
 };
