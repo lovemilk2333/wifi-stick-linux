@@ -32,7 +32,7 @@ on:
           - zh_cn
           - en_us
       apt_mirror:
-        description: Debian mirror URL, without the distribution path
+        description: Debian mirror URL of rootfs distribution, without the distribution path
         required: true
         default: https://mirror.nju.edu.cn/debian
         type: string
