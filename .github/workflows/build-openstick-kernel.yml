@@ -19,13 +19,21 @@ on:
         default: false
         type: boolean
       region:
-        description: Target locale and timezone
+        description: Target timezone region
         required: true
         default: shanghai
         type: choice
         options:
           - shanghai
           - hong_kong
+      language:
+        description: Display language for the generated rootfs
+        required: true
+        default: zh_cn
+        type: choice
+        options:
+          - zh_cn
+          - en_us
       apt_mirror:
         description: Debian mirror URL, without the distribution path
         required: true
@@ -136,10 +144,11 @@ jobs:
         env:
           APT_MIRROR: ${{ inputs.apt_mirror }}
           REGION: ${{ inputs.region }}
+          LANGUAGE: ${{ inputs.language }}
         run: |
           set -euxo pipefail
           sudo install -m 0755 kernel-ci/configure-rootfs.sh /mnt/configure-rootfs.sh
-          sudo chroot /mnt /bin/sh -eux /configure-rootfs.sh "$APT_MIRROR" "$REGION"
+          sudo chroot /mnt /bin/sh -eux /configure-rootfs.sh "$APT_MIRROR" "$REGION" "$LANGUAGE"
           sudo rm /mnt/configure-rootfs.sh
 
       - name: Set root password

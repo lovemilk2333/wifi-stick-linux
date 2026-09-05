@@ -3,19 +3,31 @@ set -eu
 
 apt_mirror=${1:?missing Debian mirror URL}
 region=${2:?missing target region}
+language=${3:?missing display language}
 apt_mirror=${apt_mirror%/}
 
 case "$region" in
   shanghai)
-    target_locale=zh_CN.UTF-8
     target_timezone=Asia/Shanghai
     ;;
   hong_kong)
-    target_locale=zh_HK.UTF-8
     target_timezone=Asia/Hong_Kong
     ;;
   *)
     echo "Unsupported region: $region" >&2
+    exit 1
+    ;;
+esac
+
+case "$language" in
+  zh_cn)
+    target_locale=zh_CN.UTF-8
+    ;;
+  en_us)
+    target_locale=en_US.UTF-8
+    ;;
+  *)
+    echo "Unsupported display language: $language" >&2
     exit 1
     ;;
 esac
