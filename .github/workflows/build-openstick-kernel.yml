@@ -18,14 +18,11 @@ on:
         required: true
         default: false
         type: boolean
-      region:
-        description: Target timezone region
+      timezone:
+        description: Timezone for the generated rootfs, e.g. Asia/Taipei
         required: true
-        default: shanghai
-        type: choice
-        options:
-          - shanghai
-          - hong_kong
+        default: Asia/Taipei
+        type: string
       language:
         description: Display language for the generated rootfs
         required: true
@@ -42,7 +39,7 @@ on:
       upload_deb:
         description: Upload the built Linux Debian packages as a separate artifact
         required: true
-        default: false
+        default: true
         type: boolean
 
 permissions:
@@ -143,12 +140,12 @@ jobs:
       - name: Install kernel packages into root filesystem
         env:
           APT_MIRROR: ${{ inputs.apt_mirror }}
-          REGION: ${{ inputs.region }}
+          TIMEZONE: ${{ inputs.timezone }}
           LANGUAGE: ${{ inputs.language }}
         run: |
           set -euxo pipefail
           sudo install -m 0755 kernel-ci/configure-rootfs.sh /mnt/configure-rootfs.sh
-          sudo chroot /mnt /bin/sh -eux /configure-rootfs.sh "$APT_MIRROR" "$REGION" "$LANGUAGE"
+          sudo chroot /mnt /bin/sh -eux /configure-rootfs.sh "$APT_MIRROR" "$TIMEZONE" "$LANGUAGE"
           sudo rm /mnt/configure-rootfs.sh
 
       - name: Set root password

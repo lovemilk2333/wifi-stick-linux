@@ -2,19 +2,13 @@
 set -eu
 
 apt_mirror=${1:?missing Debian mirror URL}
-region=${2:?missing target region}
+timezone=${2:?missing target timezone}
 language=${3:?missing display language}
 apt_mirror=${apt_mirror%/}
 
-case "$region" in
-  shanghai)
-    target_timezone=Asia/Shanghai
-    ;;
-  hong_kong)
-    target_timezone=Asia/Hong_Kong
-    ;;
-  *)
-    echo "Unsupported region: $region" >&2
+case "$timezone" in
+  *..*|/*|*[!A-Za-z0-9_+/-]*)
+    echo "Invalid timezone: $timezone" >&2
     exit 1
     ;;
 esac
@@ -74,8 +68,12 @@ sed -i "/^# $target_locale UTF-8$/c\\$target_locale UTF-8" /etc/locale.gen
 grep -qxF "$target_locale UTF-8" /etc/locale.gen || echo "$target_locale UTF-8" >> /etc/locale.gen
 locale-gen
 update-locale LANG="$target_locale"
-ln -snf "/usr/share/zoneinfo/$target_timezone" /etc/localtime
-echo "$target_timezone" > /etc/timezone
+[ -f "/usr/share/zoneinfo/$timezone" ] || {
+  echo "Unsupported timezone: $timezone" >&2
+  exit 1
+}
+ln -snf "/usr/share/zoneinfo/$timezone" /etc/localtime
+echo "$timezone" > /etc/timezone
 dpkg-reconfigure -f noninteractive tzdata
 sed -i '/PermitRootLogin /c PermitRootLogin yes' /etc/ssh/sshd_config
 sed -i '/PasswordAuthentication /c PasswordAuthentication yes' /etc/ssh/sshd_config
