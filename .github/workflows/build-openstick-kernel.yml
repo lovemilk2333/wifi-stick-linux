@@ -45,7 +45,6 @@ jobs:
   build:
     runs-on: ubuntu-24.04
     env:
-      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
       ARCH: arm64
       CROSS_COMPILE: aarch64-linux-gnu-
       CCACHE_DIR: ${{ github.workspace }}/.ccache
@@ -54,7 +53,7 @@ jobs:
       ROOTFS_URL: https://github.com/OpenStick/OpenStick/releases/download/v1/debian.zip
     steps:
       - name: Check out kernel source
-        uses: actions/checkout@v5
+        uses: actions/checkout@v7
         with:
           fetch-depth: 1
 
@@ -76,7 +75,7 @@ jobs:
       - name: Restore compiler cache
         if: ${{ !inputs.clean_build }}
         id: cache-restore
-        uses: actions/cache/restore@v5
+        uses: actions/cache/restore@v6
         with:
           path: .ccache
           key: ${{ steps.cache-key.outputs.value }}
@@ -202,7 +201,7 @@ jobs:
           (cd output/deb && sha256sum * > SHA256SUMS)
 
       - name: Upload SP970 kernel image
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: sp970-boot-${{ github.sha }}
           path: output/boot/sp970/
@@ -211,7 +210,7 @@ jobs:
           compression-level: 6
 
       - name: Upload UFI001B kernel image
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ufi001b-boot-${{ github.sha }}
           path: output/boot/ufi001b/
@@ -220,7 +219,7 @@ jobs:
           compression-level: 6
 
       - name: Upload UFI001C kernel image
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: ufi001c-boot-${{ github.sha }}
           path: output/boot/ufi001c/
@@ -229,7 +228,7 @@ jobs:
           compression-level: 6
 
       - name: Upload UZ801 kernel image
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: uz801-boot-${{ github.sha }}
           path: output/boot/uz801/
@@ -239,7 +238,7 @@ jobs:
 
       - name: Upload Debian kernel packages
         if: inputs.upload_deb
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: deb-packages-${{ github.sha }}
           path: output/deb/
@@ -249,13 +248,13 @@ jobs:
 
       - name: Save compiler cache
         if: ${{ !cancelled() && steps.cache-restore.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v5
+        uses: actions/cache/save@v6
         with:
           path: .ccache
           key: ${{ steps.cache-key.outputs.value }}
 
       - name: Upload root filesystem image
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v7
         with:
           name: rootfs-${{ github.sha }}
           path: output/rootfs/
