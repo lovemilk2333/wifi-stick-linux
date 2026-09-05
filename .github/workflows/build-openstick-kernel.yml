@@ -18,6 +18,11 @@ on:
         required: true
         default: false
         type: boolean
+      enable_rndis_ms_iad:
+        description: Apply patch/rndis-ms-iad_desc.patch (RNDIS as Microsoft Wireless Controller 0xE0/01/03) before building
+        required: true
+        default: true
+        type: boolean
       timezone:
         description: Timezone for the generated rootfs, e.g. Asia/Taipei
         required: true
@@ -61,6 +66,13 @@ jobs:
         uses: actions/checkout@v7
         with:
           fetch-depth: 1
+
+      - name: Apply RNDIS MS IAD patch
+        if: inputs.enable_rndis_ms_iad
+        run: |
+          set -euxo pipefail
+          git apply --check patch/rndis-ms-iad_desc.patch
+          git apply patch/rndis-ms-iad_desc.patch
 
       - name: Calculate compiler cache key
         id: cache-key
