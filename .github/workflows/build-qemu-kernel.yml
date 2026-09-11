@@ -1,0 +1,200 @@
+name: Build QEMU test kernel
+
+# Builds an arm64 kernel for the QEMU `virt` machine, for testing the
+# wifi-stick-usb-switcher without OpenStick hardware.
+#
+# This is NOT a device kernel: it has no msm8916 support and cannot be
+# flashed to a stick. Everything it emits is prefixed `qemu-` and the
+# artifact name carries a -qemu- marker so it is never mistaken for an
+# OpenStick boot image. See kernel-ci/README.md for what qemu.config
+# enables and why.
+#
+# There is no rootfs, no boot.img and no Debian packaging here — the
+# artifact is a plain Image the qemu-system-aarch64 command line boots
+# directly (see tests/qemu/ in wifi-stick-usb-switcher).
+
+on:
+  workflow_dispatch:
+    inputs:
+      localversion:
+        description: CONFIG_LOCALVERSION value, including a leading hyphen when wanted
+        required: true
+        default: -qemu
+        type: string
+      clean_build:
+        description: Delete the matching ccache entry and compile from scratch
+        required: true
+        default: false
+        type: boolean
+      smoke_test:
+        description: Boot the built kernel under qemu-system-aarch64 and check the virtual UDC appears
+        required: true
+        default: true
+        type: boolean
+
+permissions:
+  contents: read
+  actions: write
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    env:
+      ARCH: arm64
+      CROSS_COMPILE: aarch64-linux-gnu-
+      CCACHE_DIR: ${{ github.workspace }}/.ccache
+      CCACHE_MAXSIZE: 1500M
+      DEBIAN_FRONTEND: noninteractive
+    steps:
+      - name: Check out kernel source
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 1
+
+      - name: Calculate compiler cache key
+        id: cache-key
+        run: |
+          set -euo pipefail
+          echo "value=ccache-Linux-arm64-qemu-$(sha256sum kernel-ci/qemu.config Makefile Kconfig | sha256sum | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+
+      - name: Clear compiler cache
+        if: inputs.clean_build
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh cache delete "${{ steps.cache-key.outputs.value }}" --repo "$GITHUB_REPOSITORY" --confirm || true
+
+      - name: Restore compiler cache
+        if: ${{ !inputs.clean_build }}
+        id: cache-restore
+        uses: actions/cache/restore@v6
+        with:
+          path: .ccache
+          key: ${{ steps.cache-key.outputs.value }}
+          # Deliberately no fallback to `ccache-Linux-arm64-`: the device
+          # build's cache is a different configuration, and sharing it makes
+          # both harder to reason about (and to evict).
+          restore-keys: |
+            ccache-Linux-arm64-qemu-
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            gcc-aarch64-linux-gnu ccache bison flex cpio \
+            libncurses-dev libssl-dev libelf-dev bc \
+            git make build-essential curl ca-certificates
+
+      - name: Configure kernel
+        env:
+          LOCALVERSION: ${{ inputs.localversion }}
+        run: |
+          set -euxo pipefail
+          [[ "$LOCALVERSION" =~ ^[A-Za-z0-9._+-]*$ ]] || {
+            echo "CONFIG_LOCALVERSION may contain only letters, digits, ., _, +, and -" >&2
+            exit 1
+          }
+          cp kernel-ci/qemu.config .config
+          sed -i "s/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=\"$LOCALVERSION\"/" .config
+          make olddefconfig
+
+      - name: Verify required options survived olddefconfig
+        run: |
+          set -euo pipefail
+          # olddefconfig silently drops symbols whose dependencies are unmet,
+          # so assert the ones the test environment actually relies on.
+          required="
+            CONFIG_USB_DUMMY_HCD=y
+            CONFIG_USB_GADGET=y
+            CONFIG_USB_CONFIGFS=y
+            CONFIG_USB_CONFIGFS_RNDIS=y
+            CONFIG_USB_CONFIGFS_F_FS=y
+            CONFIG_CONFIGFS_FS=y
+            CONFIG_INPUT_EVDEV=y
+            CONFIG_INPUT_UINPUT=y
+            CONFIG_LEDS_CLASS=y
+            CONFIG_LEDS_USER=y
+            CONFIG_VIRTIO=y
+            CONFIG_VIRTIO_MMIO=y
+            CONFIG_VIRTIO_BLK=y
+            CONFIG_VIRTIO_PCI=y
+            CONFIG_PCI=y
+            CONFIG_SERIAL_AMBA_PL011=y
+            CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
+            CONFIG_NET_9P=y
+            CONFIG_NET_9P_VIRTIO=y
+            CONFIG_9P_FS=y
+            CONFIG_EXT4_FS=y
+            CONFIG_DEVTMPFS=y
+            CONFIG_DEVTMPFS_MOUNT=y
+            CONFIG_UNIX98_PTYS=y
+          "
+          missing=0
+          for want in $required; do
+            grep -qx "$want" .config || { echo "MISSING: $want" >&2; missing=1; }
+          done
+          [ "$missing" -eq 0 ] || { echo "kernel-ci/qemu.config lost required options" >&2; exit 1; }
+          echo "all required options present"
+          ccache --zero-stats
+
+      - name: Build kernel
+        run: |
+          set -euxo pipefail
+          make -j"$(nproc)" CC="ccache ${CROSS_COMPILE}gcc" Image Image.gz
+          ccache --show-stats
+
+      - name: Smoke test under QEMU
+        if: inputs.smoke_test
+        run: |
+          set -euxo pipefail
+          sudo apt-get install -y qemu-system-arm
+
+          # Static arm64 init rather than the runner's busybox: the busybox
+          # available here is x86_64 and would not run inside the guest.
+          rm -rf smoke && mkdir -p smoke
+          ${CROSS_COMPILE}gcc -static -O2 -Wall -Wextra \
+            -o smoke/init kernel-ci/qemu-smoke-init.c
+          ( cd smoke && find . -print0 | cpio --null -o -H newc --quiet | gzip -9 ) > smoke.cpio.gz
+
+          set +e
+          timeout 180 qemu-system-aarch64 \
+            -M virt -cpu cortex-a57 -m 1024 -smp 2 \
+            -kernel arch/arm64/boot/Image \
+            -initrd smoke.cpio.gz \
+            -append "console=ttyAMA0 earlycon=pl011,0x9000000 rdinit=/init panic=-1" \
+            -nographic -no-reboot > smoke.log 2>&1
+          status=$?
+          set -e
+
+          cat smoke.log
+          grep -q "SMOKE: RESULT PASS" smoke.log || {
+            echo "QEMU smoke test failed (qemu exit status $status, see log above)" >&2
+            exit 1
+          }
+
+      - name: Assemble artifact
+        run: |
+          set -euxo pipefail
+          mkdir -p output
+          # `qemu-` prefixes: the OpenStick workflow also emits an `Image.gz`,
+          # and these must never be mistaken for flashable device images.
+          cp arch/arm64/boot/Image output/qemu-Image
+          cp arch/arm64/boot/Image.gz output/qemu-Image.gz
+          cp .config output/qemu-config
+          ( cd output && sha256sum qemu-* > SHA256SUMS )
+          cat output/SHA256SUMS
+
+      - name: Upload QEMU kernel image
+        uses: actions/upload-artifact@v7
+        with:
+          name: qemu-kernel-${{ github.sha }}
+          path: output/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Save compiler cache
+        if: ${{ !cancelled() && steps.cache-restore.outputs.cache-hit != 'true' }}
+        uses: actions/cache/save@v6
+        with:
+          path: .ccache
+          key: ${{ steps.cache-key.outputs.value }}
