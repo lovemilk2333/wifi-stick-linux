@@ -64,6 +64,12 @@ systemctl enable rc-local
 apt -o Acquire::https::Verify-Peer=false update
 apt -o Acquire::https::Verify-Peer=false install -y \
   ca-certificates locales tzdata usbutils curl wget fdisk net-tools nano
+# Distrust roots that chain to compromised eMudhra intermediates (CVE-2026-111943).
+# OpenSSL/GnuTLS do not honour OneCRL; blacklisting in ca-certificates.conf is required.
+sed -i \
+  -e 's|^mozilla/emSign_ECC_Root_CA_-_G3.crt|!&|' \
+  -e 's|^mozilla/Comodo_AAA_Services_root.crt|!&|' \
+  /etc/ca-certificates.conf && update-ca-certificates
 sed -i "/^# $target_locale UTF-8$/c\\$target_locale UTF-8" /etc/locale.gen
 grep -qxF "$target_locale UTF-8" /etc/locale.gen || echo "$target_locale UTF-8" >> /etc/locale.gen
 locale-gen
