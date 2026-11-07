@@ -46,6 +46,11 @@ on:
         required: true
         default: true
         type: boolean
+      only_build_kernel:
+        description: Only build the kernel (Image.gz + device dtbs + Debian packages), skipping OpenStick rootfs and boot images
+        required: true
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -130,7 +135,34 @@ jobs:
           KDEB_COMPRESS=xz make -j"$(nproc)" CC="ccache ${CROSS_COMPILE}gcc" bindeb-pkg
           ccache --show-stats
 
+      - name: Collect kernel-only artifacts
+        if: inputs.only_build_kernel
+        run: |
+          set -euxo pipefail
+          # No `Image.gz-dtb` here: it is assembled from the Image.gz and each
+          # device dtb at flash time (see the boot image steps of the full
+          # build), so plain files are all the consumer needs.
+          mkdir -p output/kernel-only
+          cp arch/arm64/boot/Image.gz output/kernel-only/
+          for device in sp970 ufi001b ufi001c uz801; do
+            cp "arch/arm64/boot/dts/qcom/msm8916-handsome-openstick-${device}.dtb" output/kernel-only/
+          done
+          ( cd output/kernel-only && sha256sum * > SHA256SUMS )
+          cat output/kernel-only/SHA256SUMS
+
+      - name: Collect Debian packages
+        # In the full build these copies happen inside "Create boot images
+        # for all devices"; kernel-only runs skip that step, so collect the
+        # freshly built .deb files here.
+        if: inputs.only_build_kernel
+        run: |
+          set -euxo pipefail
+          mkdir -p output/deb
+          cp ../linux-image-5.15.0-*.deb ../linux-headers-5.15.0-*.deb output/deb/
+          (cd output/deb && sha256sum * > SHA256SUMS)
+
       - name: Download and prepare OpenStick root filesystem
+        if: ${{ !inputs.only_build_kernel }}
         run: |
           set -euxo pipefail
           mkdir -p rootfs temp packages
@@ -150,6 +182,7 @@ jobs:
           sudo cp packages/*.deb /mnt/
 
       - name: Install kernel packages into root filesystem
+        if: ${{ !inputs.only_build_kernel }}
         env:
           APT_MIRROR: ${{ inputs.apt_mirror }}
           TIMEZONE: ${{ inputs.timezone }}
@@ -161,6 +194,7 @@ jobs:
           sudo rm /mnt/configure-rootfs.sh
 
       - name: Set root password
+        if: ${{ !inputs.only_build_kernel }}
         env:
           ROOT_PASSWORD: ${{ inputs.root_password }}
         run: |
@@ -170,6 +204,7 @@ jobs:
           printf 'root:%s\n' "$ROOT_PASSWORD" | sudo chroot /mnt chpasswd
 
       - name: Create boot images for all devices
+        if: ${{ !inputs.only_build_kernel }}
         run: |
           set -euxo pipefail
           cleanup() {
@@ -219,6 +254,7 @@ jobs:
           (cd output/deb && sha256sum * > SHA256SUMS)
 
       - name: Upload SP970 kernel image
+        if: ${{ !inputs.only_build_kernel }}
         uses: actions/upload-artifact@v7
         with:
           name: sp970-boot-${{ github.sha }}
@@ -228,6 +264,7 @@ jobs:
           compression-level: 6
 
       - name: Upload UFI001B kernel image
+        if: ${{ !inputs.only_build_kernel }}
         uses: actions/upload-artifact@v7
         with:
           name: ufi001b-boot-${{ github.sha }}
@@ -237,6 +274,7 @@ jobs:
           compression-level: 6
 
       - name: Upload UFI001C kernel image
+        if: ${{ !inputs.only_build_kernel }}
         uses: actions/upload-artifact@v7
         with:
           name: ufi001c-boot-${{ github.sha }}
@@ -246,6 +284,7 @@ jobs:
           compression-level: 6
 
       - name: Upload UZ801 kernel image
+        if: ${{ !inputs.only_build_kernel }}
         uses: actions/upload-artifact@v7
         with:
           name: uz801-boot-${{ github.sha }}
@@ -264,6 +303,16 @@ jobs:
           retention-days: 14
           compression-level: 6
 
+      - name: Upload kernel-only artifact
+        if: inputs.only_build_kernel
+        uses: actions/upload-artifact@v7
+        with:
+          name: openstick-kernel-only-${{ github.sha }}
+          path: output/kernel-only/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
       - name: Save compiler cache
         if: ${{ !cancelled() && steps.cache-restore.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v6
@@ -272,6 +321,7 @@ jobs:
           key: ${{ steps.cache-key.outputs.value }}
 
       - name: Upload root filesystem image
+        if: ${{ !inputs.only_build_kernel }}
         uses: actions/upload-artifact@v7
         with:
           name: rootfs-${{ github.sha }}
