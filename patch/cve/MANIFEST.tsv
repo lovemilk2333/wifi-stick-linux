@@ -1,51 +1,389 @@
 fixed_in	cve	commit	status	subject
+5.15.5	CVE-2021-47209	512e21c150c1c3ee298852660f3a796e267e62ec	APPLIED	sched/fair: Prevent dead task groups from regaining cfs_rq's
+5.15.8	CVE-2021-47512	d86216dfda7c98375f809e26a30bfdaaba21d46e	APPLIED	net/sched: fq_pie: prevent dismantle issue
+5.15.11	CVE-2021-47598	f6deae2e2d83bd267e1986f5d71d8c458e18fd99	APPLIED	sch_cake: do not call cake_destroy() from cake_init()
+5.15.12	CVE-2021-47106	9d558e5f0d6fdd0a568f73dceb0b40c4f5012e5a	APPLIED	netfilter: nf_tables: fix use-after-free in nft_set_catchall_destroy()
 5.15.12	CVE-2022-4744	3cb5ae77799e8ed6ec3fec0b6b4cd07f01650cc5	APPLIED	tun: avoid double free in tun_free_netdev
+5.15.13	CVE-2021-46929	75799e71df1da11394740b43ae5686646179561d	APPLIED	sctp: use call_rcu to free endpoint
 5.15.14	CVE-2021-4197	c6ebc35298848accb5e50c37fdb2490cf4690c92	APPLIED	cgroup: Use open-time credentials for process migraton perm checks
 5.15.16	CVE-2022-0185	e192ccc17ecf3e78a1c6fb81badf9b50bd791115	APPLIED	vfs: fs_context: fix up param length parsing in legacy_parse_param
 5.15.19	CVE-2022-24122	348a8501e6029f9308ea7675edfa645b5e669c9e	APPLIED	ucount:  Make get_ucount a safe get_user replacement
 5.15.20	CVE-2022-0492	4b1c32bfaa02255a5df602b41587174004996477	APPLIED	cgroup-v1: Require capabilities to set release_agent
 5.15.20	CVE-2022-1055	f36cacd6c933183c1a8827d5987cf2cfc0a44c76	APPLIED	net: sched: fix use-after-free in tc_new_tfilter()
 5.15.25	CVE-2022-0847	114e9f141822e6977633d322c1b03e89bd209932	APPLIED	lib/iov_iter: initialize "flags" in new pipe_buffer
+5.15.25	CVE-2022-48786	787468ee7a435777521d33399d012fd591ae2f94	APPLIED	vsock: remove vsock from connected table when connect is interrupted by a signal
+5.15.25	CVE-2022-48797	b3dc4b9d3ca68b370c4aeab5355007eedf948849	APPLIED	mm: don't try to NUMA-migrate COW pages that have other uses
 5.15.26	CVE-2022-25636	6c5d780469d6c3590729940e2be8a3bd66ea4814	APPLIED	netfilter: nf_tables_offload: incorrect flow offload action array size
+5.15.26	CVE-2022-48935	8ffb8ac3448845f65634889b051bd65e4dee484b	APPLIED	netfilter: nf_tables: unregister flowtable hooks on netns exit
+5.15.26	CVE-2022-48940	719d1c2524c89ada78c4c9202641c1d9e942a322	APPLIED	bpf: Fix crash due to incorrect copy_map_value
+5.15.27	CVE-2022-48911	dd648bd1b33a828f62befa696b206c688da0ec43	APPLIED	netfilter: nf_queue: fix possible use-after-free
+5.15.27	CVE-2022-48912	bd61f192a339b1095dfd6d56073a5265934c2979	APPLIED	netfilter: fix use-after-free in __nf_register_net_hook()
 5.15.29	CVE-2022-0995	1b09f28f70a5046acd64138075ae3f095238b045	APPLIED	watch_queue: Fix filter limit check
 5.15.29	CVE-2022-1011	ca62747b38f59d4e75967ebf63c992de8852ca1b	APPLIED	fuse: fix pipe buffer lifetime for direct_io
 5.15.31	CVE-2022-20368	a055f5f2841f7522b44a2b1eccb1951b4b03d51a	APPLIED	net/packet: fix slab-out-of-bounds access in packet_recvmsg()
 5.15.32	CVE-2022-1016	fafb904156fbb8f1dd34970cd5223e00b47c33be	APPLIED	netfilter: nf_tables: initialize registers in nft_do_chain()
 5.15.33	CVE-2022-30594	b6d75218ff65f4d63c9cf4986f6c55666fb90a1a	APPLIED	ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
+5.15.33	CVE-2022-49170	f68caedf264a95c0b02dfd0d9f92ac2637d5848a	APPLIED	f2fs: fix to do sanity check on curseg->alloc_type
+5.15.33	CVE-2022-49275	f43e64076ff1b1dcb893fb77ad1204105f710a29	APPLIED	can: m_can: m_can_tx_handler(): fix use after free of skb
 5.15.34	CVE-2022-29582	ba7261af2b030ab2c06189be1fc77b273716839f	APPLIED	io_uring: fix race between timeout flush and removal
+5.15.35	CVE-2022-49052	12ba1d38115a101c45d8e0ca3aa1181fd148e57f	APPLIED	mm: fix unexpected zeroed page mapping with zram swap
 5.15.36	CVE-2022-29581	ba9e9a794fd1689bf7e8a7452c55f3d3cbda7728	APPLIED	net/sched: cls_u32: fix netns refcount changes in u32_change()
 5.15.45	CVE-2022-1966	f692bcffd1f2ce5488d24fbcb8eab5f351abf79d	APPLIED	netfilter: nf_tables: disallow non-stateful expression in sets earlier
 5.15.45	CVE-2022-2959	cf2fbc56c478a34a68ff1fa6ad08460054dfd499	APPLIED	pipe: Fix missing lock in pipe_resize_ring()
+5.15.45	CVE-2022-49555	db03727b4bbbbb36e6ef4cb655c670eefb6448e9	APPLIED	Bluetooth: hci_qca: Use del_timer_sync() before freeing
+5.15.46	CVE-2022-49343	3a3ce941645407cd0b0b7f01ad9e2ea3770f46cc	APPLIED	ext4: avoid cycles in directory h-tree
+5.15.46	CVE-2022-49349	364380c00912bed9b5d99eb485018360b0ecf64f	APPLIED	ext4: fix use-after-free in ext4_rename_dir_prepare
+5.15.46	CVE-2022-49363	f2e1c38b5ac64eb1a16a89c52fb419409d12c25b	APPLIED	f2fs: fix to do sanity check on block address in f2fs_do_zero_range()
+5.15.46	CVE-2022-49425	45b2b7d7108ae1e25a5036cab04ab9273e792332	APPLIED	f2fs: fix dereference of stale list iterator after loop body
+5.15.46	CVE-2022-49474	65d347cb39e2e6bd0c2a745ad7c928998ebb0162	APPLIED	Bluetooth: fix dangling sco_conn and use-after-free in sco_sock_timeout
+5.15.51	CVE-2022-49696	cd7789e659e84f137631dc1f5ec8d794f2700e6c	APPLIED	tipc: fix use-after-free Read in tipc_named_reinit
 5.15.51	CVE-2023-2008	5b45535865d62633e3816ee30eb8d3213038dc17	APPLIED	udmabuf: add back sanity check
 5.15.54	CVE-2022-34918	c1784d2075138992b00c17ab4ffc6d855171fe6d	APPLIED	netfilter: nf_tables: stricter validation of element data
+5.15.54	CVE-2022-49700	0515cc9b6b24877f59b222ade704bfaa42caa2a6	APPLIED	mm/slub: add missing TID updates on slab deactivation
+5.15.56	CVE-2022-49647	54aee4e5ce8c21555286a6333e46c1713880cf93	APPLIED	cgroup: Use separate src/dst nodes when preloading css_sets for migration
 5.15.61	CVE-2022-2586	faafd9286f1355c76fe9ac3021c280297213330e	APPLIED	netfilter: nf_tables: do not allow SET_ID to refer to another table
 5.15.61	CVE-2022-2588	57bbb691a93bd39d0644c5c879b354232d0e0eed	APPLIED	net_sched: cls_route: remove from list when handle is 0
+5.15.61	CVE-2022-50212	91501513016903077f91033fa5d2aa26cac399b2	APPLIED	netfilter: nf_tables: do not allow CHAIN_ID to refer to another table
+5.15.61	CVE-2022-50219	1f8ca9c40e6222ce431e9ba5dae3cccce8ef9443	APPLIED	bpf: Fix KASAN use-after-free Read in compute_effective_progs
+5.15.63	CVE-2022-50048	b59bee8b05b0e789b5a298cacb09e8aaa3367a29	APPLIED	netfilter: nf_tables: possible module reference underflow in error path
+5.15.64	CVE-2022-49985	4f672112f8665102a5842c170be1713f8ff95919	APPLIED	bpf: Don't use tnum_range on array range checking for poke descriptors
+5.15.65	CVE-2022-49991	da60ddd80d09f8371fbba1a238a4b318d13ba698	APPLIED	mm/hugetlb: avoid corrupting page->mapping in hugetlb_mcopy_atomic_pte
 5.15.66	CVE-2022-20421	c2a4b5dc8fa71af73bab704d0cac42ac39767ed6	APPLIED	binder: fix UAF of ref->proc caused by race condition
+5.15.71	CVE-2022-48654	816eab147e5c6f6621922b8515ad9010ceb1735e	APPLIED	netfilter: nfnetlink_osf: fix possible bogus match in nf_osf_find()
+5.15.75	CVE-2022-50243	19d636b663e0e92951bba5fced929ca7fd25c552	APPLIED	sctp: handle the error returned from sctp_auth_asoc_init_active_key
+5.15.75	CVE-2022-50490	0e13425104903970a5ede853082d3bbb4edec6f3	APPLIED	bpf: Propagate error from htab_lock_bucket() to userspace
+5.15.75	CVE-2022-50569	03155680191ef0f004b1d6a5714c5b8cd271ab61	APPLIED	xfrm: Update ipcomp_scratches with NULL when freed
+5.15.75	CVE-2022-50630	0db2efb3bff879566f05341d94c3de00ac95c4cc	APPLIED	mm: hugetlb: fix UAF in hugetlb_handle_userfault
+5.15.75	CVE-2022-50650	4ed5155043c97ac8912bcf67331df87c833fb067	APPLIED	bpf: Fix reference state management for synchronous callbacks
+5.15.77	CVE-2022-50555	7a939503fc32bff4ed60800b73ff7fbb4aea2142	APPLIED	tipc: fix a null-ptr-deref in tipc_topsrv_accept
+5.15.78	CVE-2022-49920	1ffe7100411a8b9015115ce124cd6c9c9da6f8e3	APPLIED	netfilter: nf_tables: netlink notifier might race to release objects
 5.15.78	CVE-2023-3812	dcc79cf735b8ec4bedaa82c53bed8c62721c042b	APPLIED	net: tun: fix bugs for oversize packet when napi frags enabled
+5.15.80	CVE-2022-49775	b49026d9c86f35a4c5bfb8d7345c9c4379828c6b	APPLIED	tcp: cdg: allow tcp_cdg_release() to be called multiple times
 5.15.82	CVE-2022-4378	48642f94311b0cf9667aa6833f9f5e3a87d2a0ce	APPLIED	proc: proc_skip_spaces() shouldn't think it is working on C strings
+5.15.83	CVE-2022-48956	7390c70bd431cbfa6951477e2c80a301643e284b	APPLIED	ipv6: avoid use-after-free in ip6_fragment()
+5.15.83	CVE-2022-48986	3ac29732a2ffa64c7de13a072b0f2848b9c11037	APPLIED	mm/gup: fix gup_pud_range() for dax
+5.15.86	CVE-2022-50259	a443c55d96dede82a724df6e70a318ad15c199e1	APPLIED	bpf, sockmap: fix race in sock_map_free()
+5.15.86	CVE-2022-50536	8786bde11a4f31b63b3036731df0b47337a7a245	MANUAL	bpf, sockmap: Fix repeated calls to sock_put() when msg has more_data
+5.15.86	CVE-2022-50860	5f509fa740b17307f0cba412485072f632d5af36	APPLIED	apparmor: Fix memleak in alloc_ns()
+5.15.87	CVE-2022-50286	d440d6427a5e3a877c1c259b8d2b216ddb65e185	APPLIED	ext4: fix delayed allocation bug in ext4_clu_mapped for bigalloc + inline
+5.15.87	CVE-2022-50673	cf0e0817b0f925b70d101d7014ea81b7094e1159	APPLIED	ext4: fix use-after-free in ext4_orphan_cleanup
+5.15.89	CVE-2022-48892	b22faa21b6230d5eccd233e1b7e0026a5002b287	APPLIED	sched/core: Fix use-after-free bug in dup_user_cpus_ptr()
 5.15.89	CVE-2023-0179	a8acfe2c6fb99f9375a9325807a179cd8c32e6e3	APPLIED	netfilter: nft_payload: incorrect arithmetics when fetching VLAN header bits
+5.15.89	CVE-2023-52907	39ae73e581112cfe27ba50aecb1c891ce57cecb1	APPLIED	nfc: pn533: Wait for out_urb's completion in pn533_usb_send_frame()
+5.15.90	CVE-2022-48878	908d1742b6e694e84ead5c62e4b7c1bfbb8b46a3	APPLIED	Bluetooth: hci_qca: Fix driver shutdown on closed serdev
 5.15.91	CVE-2023-0386	e91308e63710574c4b6a0cadda3e042a3699666e	APPLIED	ovl: fail on invalid uid/gid mapping at copy up
+5.15.91	CVE-2023-53021	c53acbf2facfdfabdc6e6984a1a38f5d38b606a1	APPLIED	net/sched: sch_taprio: fix possible use-after-free
 5.15.95	CVE-2023-1281	becf55394f6acb60dd60634a1c797e73c747f9da	APPLIED	net/sched: tcindex: update imperfect hash filters respecting rcu
+5.15.100	CVE-2023-53214	aa4d726af72a21732ce120484e0b1240674a13b3	APPLIED	f2fs: fix to avoid potential memory corruption in __update_iostat_latency()
+5.15.100	CVE-2023-54243	dbb3cbbf03b3c52cb390fabec357f1e4638004f5	APPLIED	netfilter: ebtables: fix table blob use-after-free
+5.15.103	CVE-2023-53100	ca500cf2eceb5a8e93bf71ab97b5f7a18ecabce2	APPLIED	ext4: fix WARNING in ext4_update_inline_data
 5.15.109	CVE-2023-2163	e722ea6dae2cc042d1bb7090e2ef8456dd5a0e57	APPLIED	bpf: Fix incorrect verifier pruning due to missing register precision taints
 5.15.109	CVE-2023-31436	1ffc0e8105510cb826cb9d27ed1820a1131c82d4	APPLIED	net: sched: sch_qfq: prevent slab-out-of-bounds in qfq_activate_agg
 5.15.111	CVE-2023-32233	21c2a454486d5e9c1517ecca19266b3be3df73ca	APPLIED	netfilter: nf_tables: deactivate anonymous set from preparation phase
+5.15.111	CVE-2023-53537	9a7f63283af6befc0f91d549f4f6917dff7479a9	APPLIED	f2fs: fix to avoid use-after-free for cached IPU bio
+5.15.112	CVE-2023-53473	b2531936118deb3f479c4fa1bcd787b74b8faa6a	APPLIED	ext4: improve error handling from ext4_dirhash()
+5.15.112	CVE-2023-54187	8f57f3e112cf1d16682b6ff9c31c72f40f7da9c9	APPLIED	f2fs: fix potential corruption when moving a directory
+5.15.112	CVE-2023-54193	cb145932fcf6814e7e95e467eb70e7849a845ae9	APPLIED	net/sched: cls_api: remove block_cb from driver_list before freeing
+5.15.113	CVE-2023-54124	d8f4ad5f3979dbd8e6251259562f12472717883a	APPLIED	f2fs: fix to drop all dirty pages during umount() if cp_error is set
+5.15.113	CVE-2023-54182	e2759a59a4cc96af712084e9db7065c858c4fe9f	APPLIED	f2fs: fix to check readonly condition correctly
+5.15.113	CVE-2023-54200	8d56f00c61f67b450fbbdcb874855e60ad92c560	APPLIED	netfilter: nf_tables: always release netdev hooks from notifier
+5.15.115	CVE-2023-54157	1bb8a65190d45cd5c7dbc85e29b9102110cd6be6	APPLIED	binder: fix UAF of alloc->vma in race with munmap()
 5.15.116	CVE-2023-35788	45f47d2cf1142fbfe5d6fc39ad78f4aac058907c	APPLIED	net/sched: flower: fix possible OOB write in fl_set_geneve_opt()
 5.15.118	CVE-2023-3117	44ebe988cb38e720b91826f4d7c31692061ca04a	APPLIED	netfilter: nf_tables: incorrect error path handling with NFT_MSG_NEWRULE
 5.15.118	CVE-2023-3609	0e1098d72fa462944c68262e1b5cca045dcb555e	APPLIED	net/sched: cls_u32: Fix reference counter leak leading to overflow
 5.15.121	CVE-2023-35001	870dcc31c0cf47cb15a568ade4168dc644b3ccfb	APPLIED	netfilter: nf_tables: prevent OOB access in nft_byteorder_eval
 5.15.121	CVE-2023-3611	91d3554ab1fc2804c36a815c0f79502d727a41e6	APPLIED	net/sched: sch_qfq: account for stab overhead in qfq_enqueue
 5.15.121	CVE-2023-3776	5b55f2d6ef403fcda93ae4eb4d8c1ba164c66e92	APPLIED	net/sched: cls_fw: Fix improper refcount update leads to use-after-free
+5.15.121	CVE-2023-53189	82abd1c37d3bf2a2658b34772c17a25a6f9cca42	APPLIED	ipv6/addrconf: fix a potential refcount underflow for idev
+5.15.121	CVE-2023-53492	041e2ac88caef286b39064e83e825e3f53113d36	APPLIED	netfilter: nf_tables: do not ignore genmask when looking up chain by id
+5.15.121	CVE-2023-53619	6f03ce2f1abcb9f9d0511e3659ca6eb60e39f566	APPLIED	netfilter: conntrack: Avoid nf_ct_helper_hash uses after free
+5.15.121	CVE-2023-54153	c327b83c59ee938792a0300df646efac39c7d6a7	APPLIED	ext4: turn quotas off if mount failed after enabling quotas
 5.15.123	CVE-2023-3777	10013f764ad2957de08968bd02870b6b7683e3f6	APPLIED	netfilter: nf_tables: skip bound chain on rule flush
 5.15.123	CVE-2023-4004	706ce3c81b5c8e262a8bcf116ea689d0710c3a13	APPLIED	netfilter: nft_set_pipapo: fix improper element removal
+5.15.123	CVE-2023-52922	3c3941bb1eb53abe7d640ffee5c4d6b559829ab3	APPLIED	can: bcm: Fix UAF in bcm_proc_show()
 5.15.126	CVE-2023-4128	262430dfc618509246e07acd26211cb4cca79ecc	APPLIED	net/sched: cls_u32: No longer copy tcf_result on update to avoid use-after-free
 5.15.126	CVE-2023-4206	79c3d81c9ad140957b081c91908d7e2964dc603f	APPLIED	net/sched: cls_route: No longer copy tcf_result on update to avoid use-after-free
 5.15.126	CVE-2023-4207	9edf7955025a602ab6bcc94d923c436e160a10e3	APPLIED	net/sched: cls_fw: No longer copy tcf_result on update to avoid use-after-free
+5.15.126	CVE-2023-53660	b58d34068fd9f96bfc7d389988dfaf9a92a8fe00	APPLIED	bpf, cpumap: Handle skb as well when clean up ptr_ring
+5.15.126	CVE-2023-54173	c81bdf8f9f2b002d217c3d5357cdea9f2b82ff90	APPLIED	bpf: Disable preemption in bpf_event_output
 5.15.132	CVE-2023-42753	a9e6142e5f8f6ac7d1bca45c1b2b13b084ea9e14	APPLIED	netfilter: ipset: add the missing IP_SET_HASH_WITH_NET0 macro for ip_set_hash_netportnet.c
 5.15.132	CVE-2023-4623	4cf994d3f4ff42d604fae2b461bdd5195a7dfabd	APPLIED	net/sched: sch_hfsc: Ensure inner classes have fsc curve
 5.15.132	CVE-2023-4881	1ad7b189cc1411048434e8595ffcbe7873b71082	APPLIED	netfilter: nftables: exthdr: fix 4-byte stack OOB write
 5.15.132	CVE-2023-4921	6ea277b2c6263931798234e2eed892ecfbb85596	APPLIED	net: sched: sch_qfq: Fix UAF in qfq_dequeue()
+5.15.132	CVE-2023-53386	942d8cefb022f384d5424f8b90c7878f3f93726f	APPLIED	Bluetooth: Fix potential use-after-free when clear keys
+5.15.135	CVE-2023-52523	bc8b89b6963803a123f64aa9494155a037b3d728	APPLIED	bpf, sockmap: Reject sk_msg egress redirects to non-TCP sockets
+5.15.139	CVE-2023-52845	3907b89cd17fcc23e9a80789c36856f00ece0ba8	APPLIED	tipc: Change nla_policy for bearer-related names to NLA_NUL_STRING
+5.15.139	CVE-2023-52852	8c4504cc0c64862740a6acb301e0cfa59580dbc5	APPLIED	f2fs: compress: fix to avoid use-after-free on dic
+5.15.140	CVE-2023-52772	75bcfc188abf4fae9c1d5f5dc0a03540be602eef	MANUAL	af_unix: fix use-after-free in unix_stream_read_actor()
 5.15.142	CVE-2023-6932	c4a00c47a140c39a0497a40b0f54cf4586a2b1d7	APPLIED	ipv4: igmp: fix refcnt uaf issue when receiving igmp query packet
 5.15.147	CVE-2023-6040	ab3a3aadb373b47a1f401c7626608b1b214cec9e	APPLIED	netfilter: nf_tables: Reject tables of unsupported family
+5.15.148	CVE-2023-52436	32a6cfc67675ee96fe107aeed5af9776fec63f11	APPLIED	f2fs: explicitly null-terminate the xattr list
 5.15.148	CVE-2023-52438	8ad4d580e8aff8de2a4d57c5930fcc29f1ffd4a6	APPLIED	binder: fix use-after-free in shinker's callback
+5.15.148	CVE-2023-52444	f100ba617d8be6c98a68f3744ef7617082975b77	APPLIED	f2fs: fix to avoid dirent corruption
 5.15.148	CVE-2024-1085	c9ed30eea4f7bfa2441235ce23abd339ee671f50	APPLIED_MANUAL	netfilter: nf_tables: check if catch-all set element is active in next generation
+5.15.148	CVE-2024-26589	29ffa63f21bcdcef3e36b03cccf9d0cd031f6ab0	MANUAL	bpf: Reject variable offset alu on PTR_TO_FLOW_KEYS
+5.15.148	CVE-2024-26631	62b3387beef11738eb6ce667601a28fa089fa02c	APPLIED	ipv6: mcast: fix data-race in ipv6_mc_down / mld_ifc_work
+5.15.149	CVE-2023-52588	7ea0f29d9fd84905051be020c0df7d557e286136	APPLIED	f2fs: fix to tag gcing flag on page during block migration
+5.15.149	CVE-2023-52637	41ccb5bcbf03f02d820bc6ea8390811859f558f8	APPLIED	can: j1939: Fix UAF in j1939_sk_match_filter during setsockopt(SO_J1939_FILTER)
 5.15.149	CVE-2024-1086	960cf4f812530f01f6acc6878ceaa5404c06af7b	APPLIED_MANUAL	netfilter: nf_tables: reject QUEUE/DROP verdict parameters
+5.15.149	CVE-2024-26614	d86cc6ab33b085eaef27ea88b78fc8e2375c0ef3	APPLIED	tcp: make sure init the accept_queue's spinlocks once
+5.15.149	CVE-2024-26640	718f446e60316bf606946f7f42367d691d21541e	APPLIED	tcp: add sanity checks to rx zerocopy
+5.15.149	CVE-2024-26663	c1701ea85ef0ec7be6a1b36c7da69f572ed2fd12	APPLIED	tipc: Check the bearer type before calling tipc_udp_nl_bearer_add()
+5.15.149	CVE-2024-26704	afba9d11320dad5ce222ac8964caf64b7b4bedb1	APPLIED	ext4: fix double-free of blocks due to wrong extents moved_len
+5.15.149	CVE-2024-26808	70f17b48c86622217a58d5099d29242fc9adac58	APPLIED	netfilter: nft_chain_filter: handle NETDEV_UNREGISTER for inet/ingress basechain
+5.15.150	CVE-2024-26601	c1317822e2de80e78f137d3a2d99febab1b80326	ADAPTED	ext4: regenerate buddy after block freeing failed if under fc replay
+5.15.150	CVE-2024-26737	5268bb02107b9eedfdcd51db75b407d10043368c	APPLIED	bpf: Fix racing between bpf_timer_cancel_and_free and bpf_timer_cancel
+5.15.150	CVE-2024-26772	8de8305a25bfda607fc13475ebe84b978c96d7ff	APPLIED	ext4: avoid allocating blocks from corrupted group in ext4_mb_find_by_goal()
+5.15.150	CVE-2024-26773	4c21fa60a6f4606f6214a38f50612b17b2f738f5	APPLIED	ext4: avoid allocating blocks from corrupted group in ext4_mb_try_best_found()
+5.15.151	CVE-2023-52620	00b19ee0dcc1aef06294471ab489bae26d94524e	MANUAL	netfilter: nf_tables: disallow timeout for anonymous sets
+5.15.153	CVE-2024-26883	ca1f06e72dec41ae4f76e7b1a8a97265447b46ae	MANUAL	bpf: Fix stackmap overflow check on 32-bit arches
+5.15.153	CVE-2024-26884	3b08cfc65f07b1132c1979d73f014ae6e04de55d	APPLIED	bpf: Fix hashtab overflow check on 32-bit arches
+5.15.153	CVE-2024-26885	c826502bed93970f2fd488918a7b8d5f1d30e2e3	APPLIED	bpf: Fix DEVMAP_HASH overflow check on 32-bit arches
+5.15.154	CVE-2024-26642	7cdc1be24cc1bcd56a3e89ac4aef20e31ad09199	MANUAL	netfilter: nf_tables: disallow anonymous set with timeout flag
+5.15.154	CVE-2024-35872	6564b014af92b677c1f07c44d7f5b595d589cf6e	APPLIED	mm/secretmem: fix GUP-fast succeeding on secretmem folios
+5.15.154	CVE-2024-35896	440e948cf0eff32cfe322dcbca3f2525354b159b	APPLIED	netfilter: validate user input for expected length
+5.15.154	CVE-2024-35898	2485bcfe05ee3cf9ca8923a94fa2e456924c79c8	APPLIED	netfilter: nf_tables: Fix potential data-race in __nft_flowtable_type_get()
+5.15.154	CVE-2024-35910	2e43d8eba6edd1cf05a3a20fdd77688fa7ec16a4	APPLIED	tcp: properly terminate timers for kernel sockets
+5.15.157	CVE-2024-27019	379bf7257bc5f2a1b1ca8514e08a871b7bf6d920	MANUAL	netfilter: nf_tables: Fix potential data-race in __nft_obj_type_get()
+5.15.157	CVE-2024-27020	0b6de00206adbbfc6373b3ae38d2a6f197987907	APPLIED	netfilter: nf_tables: Fix potential data-race in __nft_expr_type_get()
+5.15.159	CVE-2024-36880	ed53949cc92e28aaa3463d246942bda1fbb7f307	APPLIED	Bluetooth: qca: add missing firmware sanity checks
+5.15.159	CVE-2024-36904	27b0284d8be182a81feb65581ab6a724dfd596e8	APPLIED	tcp: Use refcount_inc_not_zero() in tcp_twsk_unique().
+5.15.160	CVE-2023-53824	7cff4103be7c402ecc3e7bf8f95a64089e3c91b8	APPLIED	netlink: annotate lockless accesses to nlk->max_recvmsg_len
+5.15.161	CVE-2024-33847	8acae047215024d1ac499b3c8337ef1b952f160b	APPLIED	f2fs: compress: don't allow unaligned truncation on released compress inode
+5.15.161	CVE-2024-34027	b5bac43875aa27ec032dbbb86173baae6dce6182	APPLIED	f2fs: compress: fix to cover {reserve,release}_compress_blocks() w/ cp_rwsem lock
+5.15.161	CVE-2024-36286	25ea5377e3d2921a0f96ae2551f5ab1b36825dd4	APPLIED	netfilter: nfnetlink_queue: acquire rcu_read_lock() in instance_destroy_rcu()
+5.15.161	CVE-2024-38578	12db25a54ce6bb22b0af28010fff53ef9cb3fe93	APPLIED	ecryptfs: Fix buffer size for tag 66 packet
+5.15.161	CVE-2024-38580	cbfd1088e24ec4c1199756a37cb8e4cd0a4b016e	APPLIED	epoll: be better about file lifetimes
+5.15.161	CVE-2024-39467	1640dcf383cdba52be8b28d2a1a2aa7ef7a30c98	APPLIED	f2fs: fix to do sanity check on i_xattr_nid in sanity_check_inode()
+5.15.162	CVE-2024-36974	d3dde4c217f0c31ab0621912e682b57e677dd923	APPLIED	net/sched: taprio: always validate TCA_TAPRIO_ATTR_PRIOMAP
+5.15.162	CVE-2024-40971	724429db09e21ee153fef35e34342279d33df6ae	APPLIED	f2fs: remove clear SB_INLINECRYPT flag in default_options
+5.15.163	CVE-2024-41041	ddf516e50bf8a7bc9b3bd8a9831f9c7a8131a32a	APPLIED	udp: Set SOCK_RCU_FREE earlier in udp_lib_get_port().
+5.15.164	CVE-2024-41009	0f98f40eb1ed52af8b81f61901b6c0289ff59de4	APPLIED	bpf: Fix overrunning reservations in ringbuf
+5.15.164	CVE-2024-41090	e5e5e63c506b93b89b01f522b6a7343585f784e6	APPLIED	tap: add missing verification for short frame
+5.15.164	CVE-2024-41091	589382f50b4a5d90d16d8bc9dcbc0e927a3e39b2	APPLIED	tun: add missing verification for short frame
+5.15.165	CVE-2024-42297	ec56571b4b146a1cfbedab49d5fcaf19fe8bf4f1	APPLIED	f2fs: fix to don't dirty inode for readonly filesystem
+5.15.166	CVE-2024-43853	4e8d6ac8fc9f843e940ab7389db8136634e07989	APPLIED	cgroup/cpuset: Prevent UAF in proc_cpuset_show()
+5.15.166	CVE-2024-44987	24e93695b1239fbe4c31e224372be77f82dab69a	APPLIED	ipv6: prevent UAF in ip6_send_skb()
+5.15.167	CVE-2024-46771	10bfacbd5e8d821011d857bee73310457c9c989a	APPLIED	can: bcm: Remove proc entry when dev is unregistered.
+5.15.168	CVE-2024-47674	5b2c8b34f6d76bfbd1dd4936eb8a0fbfb9af3959	APPLIED	mm: avoid leaving partial pfn mappings around in error case
+5.15.168	CVE-2024-47679	3721a69403291e2514d13a7c3af50a006ea1153b	APPLIED	vfs: fix race between evice_inodes() and find_inode()&iput()
+5.15.168	CVE-2024-47740	88ff021e1fea2d9b40b2d5efd9013c89f7be04ac	APPLIED	f2fs: Require FMODE_WRITE for atomic write ioctls
+5.15.168	CVE-2024-49882	32bbb59e3f18facd7201bef110010bf35819b8c3	APPLIED	ext4: fix double brelse() the buffer of the extents path
+5.15.168	CVE-2024-49883	9df59009dfc6d9fc1bd9ddf6c5ab6e56d6ed887a	APPLIED	ext4: aovid use-after-free in ext4_ext_insert_extent()
+5.15.168	CVE-2024-49884	cafcc1bd62934547c76abf46c6d0d54f135006fe	APPLIED	ext4: fix slab-use-after-free in ext4_split_extent_at()
+5.15.168	CVE-2024-49889	4999fed877bb64e3e7f9ab9996de2ca983c41928	APPLIED	ext4: avoid use-after-free in ext4_ext_show_leaf()
+5.15.168	CVE-2024-49952	38e3fd0c4a2616052eb3c8f4e6f32d1ff47cd663	APPLIED	netfilter: nf_tables: prevent nf_skb_duplicated corruption
+5.15.168	CVE-2024-49983	a34bed978364114390162c27e50fca50791c568d	APPLIED	ext4: drop ppath from ext4_ext_replay_update_ex() to avoid double-free
+5.15.171	CVE-2024-50257	ba22ea01348384df19cc1fabc7964be6e7189749	APPLIED	netfilter: Fix use-after-free in get_info()
+5.15.171	CVE-2024-50262	86c8ebe02d8806dd8878d0063e8e185622ab6ea6	APPLIED	bpf: Fix out-of-bounds write in trie_get_next_key()
+5.15.171	CVE-2024-53057	05df1b1dff8f197f1c275b57ccb2ca33021df552	APPLIED	net/sched: stop qdisc_tree_reduce_backlog on TC_H_ROOT
+5.15.172	CVE-2024-50264	2a6a4e69f255b7aed17f93995691ab4f0d3c2203	APPLIED	vsock/virtio: Initialization of the dangling pointer occurring in vsk->trans
+5.15.172	CVE-2024-50301	199c20fb7499c79557a075dc24e9a7dae7d9f1ce	APPLIED	security/keys: fix slab-out-of-bounds in key_task_permission
+5.15.174	CVE-2024-53140	d2fab3d66cc16cfb9e3ea1772abe6b79b71fa603	APPLIED	netlink: terminate outstanding dump on socket close
+5.15.174	CVE-2024-53141	e67471437ae9083fa73fa67eee1573fec1b7c8cf	APPLIED	netfilter: ipset: add missing range check in bitmap_ip_uadt
+5.15.174	CVE-2024-56605	a8677028dd5123e5e525b8195483994d87123de4	APPLIED	Bluetooth: L2CAP: do not leave dangling sk pointer on error in l2cap_sock_create()
+5.15.174	CVE-2024-56637	0e67805e805c1f3edd6f43adbe08ea14b552694b	APPLIED	netfilter: ipset: Hold module reference while requesting a module
+5.15.174	CVE-2024-56642	d2a4894f238551eae178904e7f45af87577074fd	APPLIED	tipc: Fix use-after-free of kernel socket in cleanup_bearer().
+5.15.174	CVE-2024-56650	36a9d94dac28beef6b8abba46ba8874320d3e800	APPLIED	netfilter: x_tables: fix LED ID check in led_tg_check()
+5.15.174	CVE-2024-56720	e1f54c61c4c9a5244eb8159dce60d248f7d97b32	APPLIED	bpf, sockmap: Several fixes to bpf_msg_pop_data
+5.15.175	CVE-2024-53125	b57ac2d92c1f565743f6890a5b9cf317ed856b09	MANUAL	bpf: sync_linked_regs() must preserve subreg_def
+5.15.176	CVE-2024-53099	24fec234d2ba9ca3c14e545ebe3fd6dcb47f074d	APPLIED	bpf: Check validity of link->type in bpf_link_show_fdinfo()
+5.15.177	CVE-2025-21637	0a0966312ac3eedd7f5f2a766ed4702df39a9a65	APPLIED	sctp: sysctl: udp_port: avoid using current->nsproxy
+5.15.177	CVE-2025-21638	bd2a2939423566c654545fa3e96a656662a0af9e	APPLIED	sctp: sysctl: auth_enable: avoid using current->nsproxy
+5.15.177	CVE-2025-21640	86ddf8118123cb58a0fb8724cad6979c4069065b	APPLIED	sctp: sysctl: cookie_hmac_alg: avoid using current->nsproxy
+5.15.177	CVE-2025-21669	6486915fa661584d70e8e7e4068c6c075c67dd6d	APPLIED	vsock/virtio: discard packets if the transport changes
+5.15.179	CVE-2025-21919	5cb300dcdd27e6a351ac02541e0231261c775852	APPLIED	sched/fair: Fix potential memory corruption in child_cfs_rq_on_list
+5.15.180	CVE-2024-56664	fdb2cd8957ac51f84c9e742ba866087944bb834b	MANUAL	bpf, sockmap: Fix race between element replace and close()
+5.15.180	CVE-2025-21971	003d92c91cdb5a64b25a9a74cb8543aac9a8bb48	APPLIED	net_sched: Prevent creation of classes with TC_H_ROOT
+5.15.180	CVE-2025-21999	4b0b8445b6fd41e6f62ac90547a0ea9d348de3fa	APPLIED	proc: fix UAF in proc_get_inode()
+5.15.180	CVE-2025-22056	ca2adfc03cd6273f0b589fe65afc6f75e0fe116e	APPLIED	netfilter: nft_tunnel: fix geneve_opt type confusion addition
+5.15.180	CVE-2025-37785	b7531a4f99c3887439d778afaf418d1a01a5f01b	APPLIED	ext4: fix OOB read when checking dotdot dir
+5.15.181	CVE-2024-49960	22e9b83f0f33bc5a7a3181769d1dccbf021f5b04	APPLIED	ext4: fix timer use-after-free on failed mount
+5.15.181	CVE-2025-23150	2883e9e74f73f9265e5f8d1aaaa89034b308e433	APPLIED	ext4: fix off-by-one error in do_split
+5.15.181	CVE-2025-37738	f737418b6de31c962c7192777ee4018906975383	APPLIED	ext4: ignore xattrs past end
+5.15.181	CVE-2025-37797	fcc8ede663569c704fb00a702973bd6c00373283	APPLIED	net_sched: hfsc: Fix a UAF vulnerability in class handling
+5.15.181	CVE-2025-37823	da7936518996d290e2fcfcaf6cd7e15bfd87804a	APPLIED	net_sched: hfsc: Fix a potential UAF in hfsc_dequeue() too
+5.15.182	CVE-2025-37890	e3e949a39a91d1f829a4890e7dfe9417ac72e4d0	APPLIED	net_sched: hfsc: Fix a UAF vulnerability in class with netem as child qdisc
+5.15.182	CVE-2025-37913	0bf32d6fb1fcbf841bb9945570e0e2a70072c00f	APPLIED	net_sched: qfq: Fix double list add in class with netem as child qdisc
+5.15.182	CVE-2025-37914	554acc5a2ea9703e08023eb9a003f9e5a830a502	APPLIED	net_sched: ets: Fix double list add in class with netem as child qdisc
+5.15.182	CVE-2025-37915	2968632880f1792007eedd12eeedf7f6e2b7e9f3	APPLIED	net_sched: drr: Fix double list add in class with netem as child qdisc
+5.15.183	CVE-2025-37997	82c1eb32693bc48251d92532975e19160987e5b9	APPLIED	netfilter: ipset: fix region locking in hash types
+5.15.184	CVE-2025-22062	65ccb2793da7401772a3ffe85355c831b313c59f	APPLIED	sctp: add mutual exclusion in proc_sctp_do_udp_port()
+5.15.185	CVE-2025-38000	89c301e929a0db14ebd94b4d97764ce1d6981653	APPLIED	sch_hfsc: Fix qlen accounting bug when using peek in hfsc_enqueue()
+5.15.185	CVE-2025-38001	2c928b3a0b04a431ffcd6c8b7d88a267124a3a28	APPLIED	net_sched: hfsc: Address reentrant enqueue adding class to eltree twice
+5.15.186	CVE-2025-38083	20f68e6a9e41693cb0e55e5b9ebbcb40983a4b8f	APPLIED	net_sched: prio: fix a race in prio_tune()
+5.15.186	CVE-2025-38108	110a47efcf23438ff8d31dbd9c854fae2a48bf98	APPLIED	net_sched: red: fix a race in __red_change()
+5.15.186	CVE-2025-38115	5814a7fc3abb41f63f2d44c9d3ff9d4e62965b72	APPLIED	net_sched: sch_sfq: fix a potential crash on gso_skb handling
+5.15.186	CVE-2025-38184	8595350615f952fcf8bc861464a6bf6b1129af50	APPLIED	tipc: fix null-ptr-deref when acquiring remote ip of ethernet bearer
+5.15.186	CVE-2025-38218	38ef48a8afef8df646b6f6ae7abb872f18b533c1	APPLIED	f2fs: fix to do sanity check on sit_bitmap_size
+5.15.186	CVE-2025-38352	2f3daa04a9328220de46f0d5c919a6c0073a9f0b	APPLIED	posix-cpu-timers: fix race between handle_posix_cpu_timers() and posix_cpu_timer_del()
+5.15.186	CVE-2025-38416	ac6992f72bd8e22679c1e147ac214de6a7093c23	APPLIED	NFC: nci: uart: Set tty->disc_data only in success path
+5.15.189	CVE-2025-38461	36a439049b34cca0b3661276049b84a1f76cc21a	APPLIED	vsock: Fix transport_* TOCTOU
+5.15.189	CVE-2025-38464	dab8ded2e5ff41012a6ff400b44dbe76ccf3592a	APPLIED	tipc: Fix use-after-free in tipc_conn_close().
+5.15.190	CVE-2025-38177	a5efc95a33bd4fcb879250852828cc58c7862970	APPLIED	sch_hfsc: make hfsc_qlen_notify() idempotent
+5.15.190	CVE-2025-38477	c6df794000147a3a02f79984aada4ce83f8d0a1e	APPLIED	net/sched: sch_qfq: Fix race condition on qfq_aggregate
+5.15.190	CVE-2025-38528	97303e541e12f1fea97834ec64b98991e8775f39	APPLIED	bpf: Reject %p% format string in bprintf-like helpers
+5.15.190	CVE-2025-38550	6e4eec86fe5f6b3fdbc702d1d36ac2a6e7ec0806	APPLIED	ipv6: mcast: Delay put pmc->idev in mld_del_delrec()
+5.15.190	CVE-2025-38577	5cd99d5aa3d39086bdb53eb5c52df16e98b101a0	MANUAL	f2fs: fix to avoid panic in f2fs_evict_inode
+5.15.190	CVE-2025-38578	1edf68272b8cba2b2817ef1488ecb9f0f84cb6a0	APPLIED	f2fs: fix to avoid UAF in f2fs_sync_inode_meta()
+5.15.190	CVE-2025-38579	08e8ab00a6d20d5544c932ee85a297d833895141	APPLIED	f2fs: fix KMSAN uninit-value in extent_info usage
+5.15.190	CVE-2025-38614	71379495ab70eaba19224bd71b5b9b399eb85e04	APPLIED	eventpoll: Fix semi-unbounded recursion
+5.15.190	CVE-2025-38617	ba2257034755ae773722f15f4c3ad1dcdad15ca9	APPLIED	net/packet: fix a race in packet_set_ring() and packet_notifier()
+5.15.190	CVE-2025-38618	cf86704798c1b9c46fa59dfc2d662f57d1394d79	APPLIED	vsock: Do not allow binding to VMADDR_PORT_ANY
+5.15.190	CVE-2025-38639	b10cfa2de13d28ddd03210eb234422b7ec92725a	APPLIED	netfilter: xt_nfacct: don't assume acct name is null-terminated
+5.15.190	CVE-2025-38652	666b7cf6ac9aa074b8319a2b68cba7f2c30023f0	APPLIED	f2fs: fix to avoid out-of-boundary access in devs.path
+5.15.190	CVE-2025-38677	6b7784ea07e6aa044f74b39d6b5af5e28746fc81	APPLIED	f2fs: fix to avoid out-of-boundary access in dnode page
+5.15.190	CVE-2025-38718	cd0e92bb2b7542fb96397ffac639b4f5b099d0cb	APPLIED	sctp: linearize cloned gso packets in sctp_rcv
+5.15.190	CVE-2025-39776	7bf57a0709cd7c9088cea8de023d6f4fbf2518b0	APPLIED	mm/debug_vm_pgtable: clear page table entries at destroy_args()
+5.15.192	CVE-2025-39902	7e287256904ee796c9477e3ec92b07f236481ef3	APPLIED	mm/slub: avoid accessing metadata when pointer is invalid in object_err()
+5.15.194	CVE-2025-39873	e202ffd9e54538ef67ec301ebd6d9da4823466c9	APPLIED	can: xilinx_can: xcan_write_frame(): fix use-after-free of transmitted SKB
+5.15.194	CVE-2025-39985	6eec67bfb25637f9b51e584cf59ddace59925bc8	APPLIED	can: mcba_usb: populate ndo_change_mtu() to prevent buffer overflow
+5.15.194	CVE-2025-39986	60463a1c138900494cb3adae41142a11cd8feb3c	APPLIED	can: sun4i_can: populate ndo_change_mtu() to prevent buffer overflow
+5.15.194	CVE-2025-39987	7ab85762274c0fa997f0ef9a2307b2001aae43c4	APPLIED	can: hi311x: populate ndo_change_mtu() to prevent buffer overflow
+5.15.194	CVE-2025-40006	3e851448078f5b01f6264915df3cfef75e323a12	APPLIED	mm/hugetlb: fix folio is still mapped when deleted
+5.15.196	CVE-2025-40105	8004d4b8cbf1bd68a23c160d57287e177c82cc69	APPLIED	vfs: Don't leak disconnected dentries on umount
+5.15.196	CVE-2025-40167	2e9e10657b04152ed0d6ecae8d0c02a3405e28f5	APPLIED	ext4: detect invalid INLINE_DATA + EXTENTS flag combination
+5.15.197	CVE-2025-38678	4681960bc0f4f8bcc782cbf2fd205f48ad314dfd	APPLIED	netfilter: nf_tables: reject duplicate device on updates
+5.15.197	CVE-2025-40040	b69f19244c2b6475c8a6eb72f0fb0d53509e48cd	APPLIED	mm/ksm: fix flag-dropping behavior in ksm_madvise
+5.15.197	CVE-2025-40272	bb1c19636aedae39360e6fdbcaef4f2bcff25785	APPLIED	mm/secretmem: fix use-after-free race in fault handler
+5.15.197	CVE-2025-40280	51b8f0ab888f8aa5dfac954918864eeda8c12c19	APPLIED	tipc: Fix use-after-free in tipc_mon_reinit_self().
+5.15.197	CVE-2025-40283	7a6d1e740220ff9dfcb6a8c994d6ba49e76db198	APPLIED	Bluetooth: btusb: reorder cleanup in btusb_disconnect to avoid UAF
+5.15.197	CVE-2025-40319	de2ce6b14bc3e565708a39bdba3ef9162aeffc72	APPLIED	bpf: Sync pending IRQ work before freeing ring buffer
+5.15.198	CVE-2025-71082	fff9206b0907252a41eb12b7c1407b9347df18b1	APPLIED	Bluetooth: btusb: revert use of devm_kzalloc in btusb
+5.15.199	CVE-2023-53520	e1fa25a91091bbed691ba2996a6cee809e3309a2	APPLIED	Bluetooth: Fix hci_suspend_sync crash
+5.15.199	CVE-2026-22999	cff6cd703f41d8071995956142729e4bba160363	APPLIED	net/sched: sch_qfq: do not free existing class in qfq_change_class()
+5.15.199	CVE-2026-23074	ae810e6a8ac4fe25042e6825d2a401207a2e41fb	APPLIED	net/sched: Enforce that teql can only be used as root qdisc
+5.15.199	CVE-2026-23105	b8c24cf5268fb3bfb8d16324c3dbb985f698c835	APPLIED	net/sched: qfq: Use cl_is_active to determine whether class is active in qfq_rm_from_ag
+5.15.203	CVE-2026-23268	4cafce4d6d0a66ec27e3af5637c11901d60189fa	APPLIED	apparmor: fix unprivileged local user can do privileged policy management
+5.15.203	CVE-2026-23269	5487871b2b56c19d26936ed6fdc62652b30941df	APPLIED	apparmor: validate DFA start states are in bounds in unpack_pdb
+5.15.203	CVE-2026-23274	144f88054ba0180467356f40895bd660b5dceeec	APPLIED	netfilter: xt_IDLETIMER: reject rev0 reuse of ALARM timer labels
+5.15.203	CVE-2026-23372	cdeed45ce8c92defd057f7d67ee9a69374d8fa16	APPLIED	nfc: rawsock: cancel tx_work before socket teardown
+5.15.203	CVE-2026-23391	cc57506dd66555899560b9c0f24e813f034e12ec	APPLIED	netfilter: xt_CT: drop pending enqueued packets on template removal
+5.15.203	CVE-2026-23406	f16f2e5936c0f5f0d11fdf10d2be3e47e7108e42	APPLIED	apparmor: fix side-effect bug in match_char() macro usage
+5.15.203	CVE-2026-23407	a75e12ca90c9e70ba10fee1be2f63cdd63d91a7c	APPLIED	apparmor: fix missing bounds check on DEFAULT table in verify_dfa()
+5.15.203	CVE-2026-23408	c053ae381ce227577567d1ef10090ce7506d7a28	APPLIED	apparmor: Fix double free of ns_name in aa_replace_profiles()
+5.15.203	CVE-2026-31447	3a926957cc95899ef88529710836edadc03c71a1	APPLIED	ext4: reject mount if bigalloc with s_first_data_block != 0
+5.15.203	CVE-2026-31674	af9b7e2b765966457f4ec23be5bd34a141f89574	APPLIED	netfilter: ip6t_rt: reject oversized addrnr in rt_mt6_check()
+5.15.203	CVE-2026-43028	ea01c1b219f5a11c66918abaa6f052e5a74041d6	APPLIED	netfilter: x_tables: ensure names are nul-terminated
+5.15.203	CVE-2026-43030	37db6b9726d0bcf91cbdf9d63b558c50da49f968	APPLIED	bpf: Fix regsafe() for pointers to packet
+5.15.203	CVE-2026-43339	bacc7f31085c9820922f00bc7d79756ffa13123a	APPLIED	ipv6: prevent possible UaF in addrconf_permanent_addr()
+5.15.205	CVE-2026-43284	ab8b995323e5237041472d07e5055f5f7dcdf15b	APPLIED	xfrm: esp: avoid in-place decrypt on shared skb frags
+5.15.207	CVE-2026-46333	15b828a46f305ae9f05a7c16914b3ce273474205	APPLIED	ptrace: slightly saner 'get_dumpable()' logic
+5.15.209	CVE-2026-23204	29681ed51e737be14d18ecd1c304c57002e4b72c	APPLIED	net/sched: cls_u32: use skb_header_pointer_careful()
+5.15.209	CVE-2026-31586	1bd36e93b542d9dd020190c6607c6a3663405195	APPLIED	mm: blk-cgroup: fix use-after-free in cgwb_release_workfn()
+5.15.209	CVE-2026-31673	4f6a8f10182c3a9d22e8eb183957ae7ade9e4bf7	APPLIED	af_unix: read UNIX_DIAG_VFS data under unix_state_lock
+5.15.209	CVE-2026-46015	7aa7933a5607b1e5b56f322d17265c1d0ea02c51	APPLIED	tcp: call sk_data_ready() after listener migration
+5.15.209	CVE-2026-46227	0dbc8cde64280fc37cdd678cced34eaf96cfb197	APPLIED	sctp: revalidate list cursor after sctp_sendmsg_to_asoc() in SCTP_SENDALL
+5.15.209	CVE-2026-52912	a698ac8ab2561cf575d2d9f34095032651dd952e	APPLIED	netfilter: nf_queue: hold bridge skb->dev while queued
+5.15.209	CVE-2026-52915	588933f1a2ca5ff99274f8c9f25dc3a25d0191c3	APPLIED	netfilter: ip6t_hbh: reject oversized option lists
+5.15.209	CVE-2026-64114	bc20dbd48c26e743f7e0845020c11ed2ce8b15ee	APPLIED	ipv4: raw: reject IP_HDRINCL packets with ihl < 5
+5.15.209	CVE-2026-64115	1dd531e28f61edd286edc486ab068f135b5ae1eb	APPLIED	vsock/vmci: fix UAF when peer resets connection during handshake
+5.15.210	CVE-2026-31449	c5839b34704c9c2f47f079451bdbb22de0da1ed1	APPLIED	ext4: validate p_idx bounds in ext4_ext_correct_indexes
+5.15.210	CVE-2026-31700	714aa973da8163925eda7efd49361ccbee21ee46	APPLIED	net/packet: fix TOCTOU race on mmap'd vnet_hdr in tpacket_snd()
+5.15.210	CVE-2026-46116	3943fcad7694a7d0b15aeabe7d3cc2a2eb8e92e8	APPLIED	xfrm: defensively unhash xfrm_state lists in __xfrm_state_delete
+5.15.210	CVE-2026-52910	fec41484e7c2aa7ded44c541bba98872be937754	APPLIED	bpf: Free reuseport cBPF prog after RCU grace period.
+5.15.210	CVE-2026-52927	21af4c030567d2e6c89bb927bc18b51fba52a400	APPLIED	netfilter: ebtables: fix OOB read in compat_mtw_from_user
+5.15.210	CVE-2026-52935	1777ceac4bea5e568a5ad44b7f9bb219c1db21b6	APPLIED	xfrm: espintcp: do not reuse an in-progress partial send
+5.15.210	CVE-2026-52942	d704ee9c7bc68a161684c51a7ac05b446dcf38d4	APPLIED	netfilter: nf_log: validate MAC header was set before dumping it
+5.15.210	CVE-2026-53189	108963978a681c0c468d279cac2b930c27672877	APPLIED	mm/huge_memory: update file PMD counter before folio_put()
+5.15.210	CVE-2026-53212	55b79b1ae42372012413ce0413181d26679b17ef	APPLIED	netfilter: nft_tunnel: fix use-after-free on object destroy
+5.15.210	CVE-2026-53239	c4c1ea36d83bf3c4569468ca5b8b614fda1bf821	APPLIED	xfrm: policy: fix use-after-free on inexact bin in xfrm_policy_bysel_ctx()
+5.15.210	CVE-2026-53264	18af5d2ef0c4f65787fd1280c8b23286b9f2a835	APPLIED	net/sched: act_api: use RCU with deferred freeing for action lifecycle
+5.15.210	CVE-2026-53266	76280b78cc9f23bdc6438e10ad6dff148ef8375b	APPLIED	netfilter: bridge: make ebt_snat ARP rewrite writable
+5.15.210	CVE-2026-63920	931b4a1f13408c2507719890f78f7227c34a0282	APPLIED	ipv6: validate extension header length before copying to cmsg
+5.15.210	CVE-2026-63926	d81b323af2dcee47573907ccb89c0df9b45cb2e2	APPLIED	bpf: sockmap: fix tail fragment offset in bpf_msg_push_data
+5.15.210	CVE-2026-63971	bcfeac79af740735ace44008b4a11b8e5add20f5	APPLIED	sctp: fix race between sctp_wait_for_connect and peeloff
+5.15.210	CVE-2026-64002	a0ffc6081a8b27082dd5eae5aa1e3f59bbecf06c	APPLIED	ipv4: free net->ipv4.sysctl_local_reserved_ports after unregister_net_sysctl_table()
+5.15.210	CVE-2026-64011	fb29f6bbe433f3decad227588809636c25f2a287	APPLIED	nfc: llcp: Fix use-after-free in llcp_sock_release()
+5.15.211	CVE-2026-63809	77355ef7a9f6b0d2bdf65be3b37f2c1f365e20d2	APPLIED	bpf: use kvfree() for replaced sysctl write buffer
+5.15.211	CVE-2026-63814	4e2a96ec7236e248e706850568e0a925fd21b588	APPLIED	f2fs: validate ACL entry sizes in f2fs_acl_from_disk()
+5.15.211	CVE-2026-63823	4982bfabce6b33b3c9eddb4fb900fe5568b7cf91	APPLIED	keys: Pin request_key_auth payload in instantiate paths
+5.15.211	CVE-2026-63824	b1e247338bc71826a2d2def3e0874c34749df69a	MANUAL	KEYS: fix overflow in keyctl_pkey_params_get_2()
+5.15.212	CVE-2026-63815	a08ee30dcbeff6b97df75c38c2589603ddde53a6	APPLIED	f2fs: bound i_inline_xattr_size for non-inline-xattr inodes
+5.15.212	CVE-2026-63818	ad101d15716f5a24d1fa82a849f80430c805a3dd	APPLIED	f2fs: validate orphan inode entry count
+5.15.212	CVE-2026-63828	20383429b56974507c465d016e5238b189f7a246	ADAPTED	apparmor: mediate the implicit connect of TCP fast open sendmsg
+5.15.212	CVE-2026-64189	1bc67c3fc98e9fc07032cc56afcdbc690c47d11e	APPLIED	netfilter: ipset: fix race between dump and ip_set_list resize
+5.15.212	CVE-2026-64266	5630da218a45ba80f0aba0846cbe8aa655da122b	APPLIED	fuse: re-lock request before returning from fuse_ref_folio()
+5.15.212	CVE-2026-64411	ab63ccefb9c71627f957a0724c2b9ebc869c6f20	APPLIED	netfilter: ebtables: terminate table name before find_table_lock()
+5.15.212	CVE-2026-64412	5777c8f1c3610786d8482b8f620f40fccaf1542b	APPLIED	netfilter: ebtables: module names must be null-terminated
+5.15.212	CVE-2026-64423	c6cb5f8ebe1c1a78710c19f102db9fe48b9e6ba9	APPLIED	ipv4: igmp: remove multicast group from hash table on device destruction
+5.15.212	CVE-2026-64468	0be901ab1dcc4af59b88f2e324493bb283850167	APPLIED	binder: fix UAF in binder_free_transaction()
+5.15.212	CVE-2026-64469	df1a17abba8d6fac5f965adcb8113ceace6e4949	APPLIED	binder: fix UAF in binder_thread_release()
+5.15.212	CVE-2026-64548	a12b1575f9feabd91695a9e9d004862f7195fa25	APPLIED	bpf, sockmap: reject overflowing copy + len in bpf_msg_push_data()
+5.15.212	CVE-2026-68479	bda3c598ade6ea03884074b91e31608326684921	APPLIED	Bluetooth: btrtl: validate firmware patch bounds
+5.15.212	CVE-2026-72036	eb1a9637f0bd84b5db8803af65dfb1f44785406f	APPLIED	net/sched: sch_multiq: Replace direct dequeue call with peek and qdisc_dequeue_peeked
+5.15.212	CVE-2026-72250	2a95ec21824a8ad81ad660b12231456fc0ac9830	APPLIED	netfilter: nf_conntrack_reasm: guard mac_header adjustment after IPv6 defrag
+5.15.212	CVE-2026-72389	c86579b0a2d201792bcb59316629f4ba4758cfc8	ADAPTED	bridge: stp: Fix a potential use-after-free when deleting a bridge
+5.15.212	CVE-2026-72435	6e98407cb94e035bba98956adc9096a76d8b2a9f	APPLIED	netfilter: ipset: fix order of kfree_rcu() and rcu_assign_pointer()
+5.15.212	CVE-2026-72459	b5a9da5d36162d34db0f36abb15420e295176793	APPLIED	apparmor: aa_label_alloc use aa_label_free on alloc failure
+5.15.212	CVE-2026-72460	cfc224866530a6842b6c2d2d30ef6a9b0e64bb9c	APPLIED	apparmor: check label build before no_new_privs test
+5.15.212	CVE-2026-74256	d693c5ed67dabe1ccbf8dcea93075bdc9ffd4ca0	APPLIED	bpf, sockmap: fix integer overflow in bpf_msg_pop_data() bounds check
+5.15.212	CVE-2026-74283	52864c6c13dcc292481eabfeb3c31a86c3ec06f2	APPLIED	tipc: require net admin for TIPCv2 netlink mutators
+5.15.212	CVE-2026-80591	c8a10f174316e80d577e6549099b71a7a2111f3f	APPLIED	f2fs: fix listxattr handling of corrupted xattr entries
+5.15.212	CVE-2026-80619	9d37dc6376e336dc4b4f39a7ad0d069aa70e9495	MANUAL	apparmor: fix potential UAF in aa_replace_profiles
+5.15.212	CVE-2026-80664	0afc9ad987c0faa80ab5f8d6e7815085ac8dbb82	APPLIED	netfilter: xt_nat: reject unsupported target families
+5.15.213	CVE-2026-64560	d8bcb28abad857f1415da7656f19b2ada90af04f	ADAPTED	posix-cpu-timers: Prevent UAF caused by non-leader exec() race
+5.15.216	CVE-2026-53090	8a800497d9f6c2ec9c2c1ba7b71d0ac2ea7f7bbe	APPLIED	bpf: Fix ld_{abs,ind} failure path analysis in subprogs
+5.15.216	CVE-2026-64543	f05b3f4c78370469286879c765f5a1dd39dbcd32	APPLIED	tipc: fix use-after-free of the discoverer in tipc_disc_rcv()
+5.15.216	CVE-2026-68284	b2bcbeabfd843d47468fa095b1bd08ddb90cf616	APPLIED	bpf, sockmap: Fix cork use-after-free in tcp_bpf_sendmsg()
+5.15.216	CVE-2026-68297	dc4b577a083b361d25e118dc96d8281255ebe22c	APPLIED	tipc: fix u16 MTU truncation in media and bearer MTU validation
+5.15.216	CVE-2026-68320	6837c1c19a259518974cbc5a52017646e3906564	APPLIED	sctp: fix auth_chunk_list capacity check in sctp_auth_ep_add_chunkid
+5.15.216	CVE-2026-68338	c820f4b7f2fa38f8769db0d0cefdd94e2721504d	APPLIED	net/packet: avoid fanout hook re-registration after unregister
+5.15.216	CVE-2026-68377	389d03992dabb80488228e8119b9dd6d0f58e1a6	APPLIED	net/sched: act_tunnel_key: Defer dst_release to RCU callback
+5.15.216	CVE-2026-74456	5f2fa5840c34d3a558c57855781be75e03bef752	APPLIED	can: peak_usb: peak_usb_start(): fix double free of transfer buffer on URB submit error
+5.15.216	CVE-2026-74481	b2c094e98f8bb823b3ae475f7169fe2091c40c6d	APPLIED	mm/page_reporting: use system_freezable_wq to fix UAF during suspend
+5.15.216	CVE-2026-74482	f87c08060818ebb19bafed37c38244538da25097	APPLIED	mm/huge_memory: unlock i_mmap_rwsem before releasing after-split folios
+5.15.216	CVE-2026-74492	f9d6cabff1fca010562dcdb0d22b296bdca3ba5a	APPLIED	netfilter: ipset: do not update comments from kernel-side hash adds
+5.15.216	CVE-2026-74518	9c5fdffc5e1ce84403c58289ee72697051803bf7	APPLIED	mm/hugetlb: fix list corruption in allocate_file_region_entries()
+5.15.216	CVE-2026-74564	dee686b5e7f21180538ff719867702f411c8eb5c	APPLIED	netfilter: xt_hashlimit: validate hashtable supports XT_HASHLIMIT_RATE_MATCH
+5.15.216	CVE-2026-74567	79916f40d4ab1b4ae694d8c024fd179454bfe46e	APPLIED	keys: fix out-of-bounds read in keyring_get_key_chunk()
+5.15.216	CVE-2026-74579	8720df4504e0ed1781a702f65251bd47b3534d5e	APPLIED	netfilter: nft_payload: fix mask build for partial field offload
+5.15.216	CVE-2026-74583	820f083c294ad6d319c02a7d43294f2ed2565139	APPLIED	net/sched: cls_route: fix fastmap use-after-free on filter
+5.15.216	CVE-2026-74589	9b4fbc371a6ecf1b4e43b5a629015cc0830d8de3	MANUAL	bpf, sockmap: Fix sk_redir use-after-free in send verdict
+5.15.216	CVE-2026-74609	69d209461c110388710e483a130caf051e4fd09a	APPLIED	tipc: read le->link under the node lock in tipc_node_link_down()
+5.15.216	CVE-2026-74630	aedcfefdb5b7ed7f8a6196a3e68a25bdbe51d2f8	APPLIED	ipv6: prevent in6_dev_get() from resurrecting inet6_dev
+5.15.216	CVE-2026-74656	e1e602d6b22d5cb1641c4459c487eb18bf569e0a	APPLIED	ipv4: fix use-after-free in fib_nhc_update_mtu()
+5.15.216	CVE-2026-74660	394d7939c6b2b9e6bea0844c89efb5913168d898	APPLIED	netfilter: ebt_nflog: pin the NFLOG backend
+5.15.216	CVE-2026-74667	4057853a91fb796c4f47c7d1baf1aa085394148e	MANUAL	net/packet: reset the MAC header on the packet-socket transmit path
+5.15.216	CVE-2026-74720	8109c25e0c41f5f19a1c2380bb49c991a877494e	APPLIED	bpf: Preserve pointer state for commuted arithmetic
+5.15.216	CVE-2026-80706	84c850b08fc0d671c245144b619683129b55690a	APPLIED	can: softing: fw_parse(): validate firmware record spans
+5.15.216	CVE-2026-80718	92c43ac3c2b09eb16162e8144e73c00b7c3e29d6	APPLIED	mm/percpu-km: fix bitmap overflow and accounting in pcpu_create_chunk()
+5.15.217	CVE-2026-68138	6e0241f6cbb149d926ee8efee2c734fea71452cf	APPLIED	net/sched: serialize qdisc_rtab_list against concurrent get/put
+5.15.217	CVE-2026-72110	7df67a4799067a59e6a2d53f8059a6be6e73e678	APPLIED	bpf,fork: wipe ->bpf_storage before bailouts that access it
+5.15.217	CVE-2026-74594	894a9300d7fb2e2951da92e565ae6de7ddfb0a69	ADAPTED	sched/psi: Shut down rtpoll_timer in psi_cgroup_free()
+5.15.217	CVE-2026-74748	c21afc7c216a4d257a4f3f300e0791890bc846b9	APPLIED	netfilter: ipset: fix refcount race between list:set GC and swap
+5.15.218	CVE-2026-64581	a9340ebdc13f8bb5063c0bc0b037ee7e640d4ae9	APPLIED	xfrm: fix sk_dst_cache double-free in xfrm_user_policy()
+5.15.218	CVE-2026-74632	b7041ba61c5da4e0b56f9be58cfb87d7689724e4	APPLIED	mm/huge_memory: fix huge_zero_pfn race
+5.15.220	CVE-2024-46754	a675524cfbe88fd49c05ff8807a08646983e687c	APPLIED	bpf: Remove tst_run from lwt_seg6local_prog_ops.
+5.15.221	CVE-2026-53078	4c1c5efd9d1d74743d41ce4e1600501b4feb6827	APPLIED	bpf: Fix same-register dst/src OOB read and pointer leak in sock_ops
+5.15.221	CVE-2026-80932	531e2ac2dab1ab90a16427c4f9c86663633e9487	APPLIED	vsock/virtio: flush works in dependency order
+5.15.221	CVE-2026-89605	743e7aeb9575c0838d8996d40d81a6b8fa5cd060	APPLIED	ecryptfs: release message context on send failure
+5.15.221	CVE-2026-89606	5668121974eb7f7aa82793a9d0d13abadb8904dc	APPLIED	ecryptfs: reject too-small tag 70 packets
+5.15.221	CVE-2026-89607	e2152d491ae62d96a32ed59778680a242af1fbc6	APPLIED	ecryptfs: reject oversized encrypted_key_size in parse_tag_3_packet
+5.15.221	CVE-2026-89608	66a87559ecb26afe80ad512faf728a158e2b81da	APPLIED	ecryptfs: pass packet set buffer size to parser
+5.15.221	CVE-2026-89609	4d50b8aea11ad9594c8704a4c647e11311ab7b19	APPLIED	ecryptfs: hold msg ctx list lock when cleaning daemon queue
+5.15.221	CVE-2026-90062	6e7ad6e69be4751ab2476042c70c600bdaa8d4f2	APPLIED	netfilter: nf_tables: move hardware offload step after building the chain blob
+5.15.221	CVE-2026-93138	a7fe72d780122eb934536f1719abad445f6afdf7	APPLIED	bpf: Fix vmlinux BTF prep race in bpf_get_btf_vmlinux
+5.15.222	CVE-2025-21759	6901bbb169e3add6c037218d996790cef6b3d650	ADAPTED	ipv6: mcast: extend RCU protection in igmp6_send()
+5.15.222	CVE-2026-52988	8fdd2204503ab1ce07dc000c277e2c3edf96a67b	ADAPTED	netfilter: nf_tables: join hook list via splice_list_rcu() in commit phase
+5.15.222	CVE-2026-93288	ba2e246aa294f9acd86194ea87fb6834ed0a37ac	APPLIED	netfilter: nfnetlink_log: wait for rcu grace period before freeing pernet state
+5.15.222	CVE-2026-93816	6343208fd73f3f2b8044c0922185cd13ff807693	APPLIED	f2fs: validate inline dentry name lengths before conversion
+5.15.222	CVE-2026-97608	51417230716b73f6aa1dc402b3a56d3382a694dc	APPLIED	netfilter: nf_log: unregister loggers before per-net teardown
+5.15.222	CVE-2026-97940	63407cddabc5992b5ac03af165559f4a1968a032	APPLIED	ipv6: fix fib6 walker UAF on seq stop
+5.15.222	CVE-2026-98241	904a0e827d0d7189271a3a2eb648293809f25efc	APPLIED	ipv6: xfrm: use full sockets in local error paths
+5.15.222	CVE-2026-98383	cae8674489f26edf7553fdd660599466cbb4c32f	APPLIED	bpf: Disallow bpf_skb_pull_data() for LWT_SEG6LOCAL
+5.15.222	CVE-2026-98485	fe336bab13834394320997de8b16ca4a913b4f13	APPLIED	netfilter: ip6t_rt: fix zero-address non-strict match out-of-bounds read
+5.15.224	CVE-2022-50167	f665c56e6836933335e5a4513fc9b0bf47cdf81f	APPLIED	bpf: fix potential 32-bit overflow when accessing ARRAY map element
+5.15.224	CVE-2025-38248	5df2d582f6e8a81e7ab066464845b38b2fb04094	APPLIED	bridge: mcast: Fix use-after-free during router port configuration
+5.15.224	CVE-2026-23392	ec0f801e5ce0162fc4fea95607c716b264d283fb	APPLIED	netfilter: nf_tables: release flowtable after rcu grace period on error
+5.15.224	CVE-2026-64015	5036a9aa7f21fbce89a2a8451bbc177bae2e920d	ADAPTED	security/keys: fix missed RCU read section on lookup
+5.15.224	CVE-2026-74739	07f57c7c47459e9bc75186b3af0fc2bc5be72f89	APPLIED	net/sched: cls_u32: skip hash tables in u32_bind_class()
+5.15.224	CVE-2026-89761	40fdee1cb4f18e6a1a21a891ae4735bcd4d35026	APPLIED	apparmor: fix out-of-bounds write when null terminating a label vec
+5.15.224	CVE-2026-89763	c96518231608bbf9568f539aadb20a8e366b54c7	APPLIED	KEYS: trusted: Fix TPM teardown ordering
+5.15.224	CVE-2026-89838	450ab2e5dbe0ef6e3ed73214256565f6f003d62a	APPLIED	f2fs: limit recovery filename logging to stored length
+5.15.224	CVE-2026-98456	76dc7e0297f6f7ebefc36a69251e3f4a676d9853	APPLIED	Bluetooth: mgmt: fix race in read_unconf_index_list()
+5.15.224	CVE-2026-99053	5b7e58e8be90f4e8530e7a60372d003dfa7fd666	APPLIED	tipc: hold a reference to nodes found by link name
+5.15.224	CVE-2026-99054	21622e5ae8b232c2e64eb1adf5546cf078d2987d	APPLIED	tipc: destroy topsrv workqueues before closing connections
+5.15.224	CVE-2026-99112	497944d534ffb1be300365523030c7c6517cbbb6	APPLIED	net/sched: cls_flower: validate mask pointer after nla_next()
+5.15.224	CVE-2026-99167	fd01abed2568209f7daaf60e5ee68ae4a4744f48	APPLIED	net/sched: fix use-after-free in __tcf_action_put()
+5.15.224	CVE-2026-99203	7cdbfa22a7e270b155ddb958b1583a999c0c8abb	APPLIED	pipe: preserve existing fasync readers on writer setup failure

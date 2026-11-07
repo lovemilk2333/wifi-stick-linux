@@ -10,11 +10,45 @@
 
 ## 统计
 
-- 5.15.y 中修复的 LPE CVE 候选：242 个；
-- 核心/可触达候选：94 个；
-- 本次合入：50 个（48 个稳定补丁直接应用，2 个因上下文差异手工应用）。
+- 5.15.y 中修复的 LPE CVE 候选：1845 个（含非核心子系统）；
+- 核心/可触达候选：第一批 94 个，第二批 452 个；
+- 已合入：388 个
+  - 第一批 50 个（48 个稳定补丁直接应用，2 个手工应用）；
+  - 第二批 338 个（316 个直接应用，8 个适配 5.15.0 API，14 个手工移植）。
+- 尚未合入：113 个（见 `CONFLICTS.tsv`，多为依赖前置重构或目标功能在本内核配置中未启用）。
 
 补丁来源：`https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git`（`linux-5.15.y`）。
+
+## 批次说明
+
+### 第一批（50 个）
+
+覆盖 5.15.0 → 5.15.149 之间修复、且属于核心可触达子系统的 LPE。
+
+### 第二批（338 个）
+
+覆盖 5.15.150 → 5.15.224 以及第一批遗漏的早期核心 CVE，按修复版本升序多轮应用。
+其中 8 个补丁使用了 5.15.0 中不存在的 API，已在本地适配：
+
+| CVE | 适配内容 |
+| --- | --- |
+| CVE-2026-64015 | `guard(rcu)()` → 显式 `rcu_read_lock()/rcu_read_unlock()` |
+| CVE-2026-64560 | 同上 |
+| CVE-2026-72389 | `timer_shutdown_sync()` → `del_timer_sync()` |
+| CVE-2026-74594 | 同上 |
+| CVE-2024-26601 | `ext4_mb_generate_buddy()` 适配 4 参数签名 |
+| CVE-2026-63828 | 新增 `sk_is_inet()` 辅助函数 |
+| CVE-2026-52988 | 新增 `__list_splice_rcu()` / `list_splice_rcu()` |
+| CVE-2025-21759 | 新增 `read_pnet_rcu()` / `dev_net_rcu()` |
+
+14 个手工移植的 CVE 见 `MANIFEST.tsv` 中 `status=MANUAL` 的行。
+
+`MANIFEST.tsv` 为完整清单，`status` 取值：
+
+- `APPLIED`：稳定分支补丁直接应用；
+- `ADAPTED`：直接应用但需适配 5.15.0 API 或补充辅助函数；
+- `MANUAL`：因上下文差异手工移植；
+- `CONFLICT`：未合入（仅记录于 `CONFLICTS.tsv`）。
 
 ## 补丁清单
 
@@ -71,5 +105,6 @@
 | 5.15.148 | CVE-2024-1085 | `c9ed30eea4f7` | netfilter: nf_tables: check if catch-all set element is active in next generation |
 | 5.15.149 | CVE-2024-1086 | `960cf4f81253` | netfilter: nf_tables: reject QUEUE/DROP verdict parameters |
 
-> 说明：本仓库基于 5.15.0，仍有大量在 5.15.y 后续版本修复的 CVE 未覆盖。
-> 完整覆盖建议升级到最新的 5.15.y 稳定版本，或继续按 `MANIFEST.tsv` 的方式分批回合。
+> 说明：本仓库基于 5.15.0，仍有 113 个已确认的 LPE CVE 未覆盖（见 `CONFLICTS.tsv`），
+> 这些补丁大多依赖 5.15.y 后续版本中的前置重构，或目标功能在本内核配置中未启用。
+> 完整覆盖建议升级到最新的 5.15.y 稳定版本，或按 `MANIFEST.tsv` 的方式继续分批回合。
