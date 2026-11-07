@@ -676,6 +676,7 @@ okay:
 	desclen = strlen(key->description);
 
 	/* calculate how much information we're going to return */
+	down_read(&key->sem);
 	ret = -ENOMEM;
 	infobuf = kasprintf(GFP_KERNEL,
 			    "%s;%d;%d;%08x;",
@@ -683,6 +684,7 @@ okay:
 			    from_kuid_munged(current_user_ns(), key->uid),
 			    from_kgid_munged(current_user_ns(), key->gid),
 			    key->perm);
+	up_read(&key->sem);
 	if (!infobuf)
 		goto error2;
 	infolen = strlen(infobuf);

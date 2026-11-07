@@ -86,7 +86,10 @@ jobs:
         run: |
           set -euo pipefail
           printf '%s' "$LOCALVERSION" | sha256sum | cut -d ' ' -f 1 > .localversion-cache-hash
-          echo "value=ccache-Linux-arm64-$(cat .localversion-cache-hash)-$(sha256sum kernel-ci/msm8916.config Makefile Kconfig | sha256sum | cut -d ' ' -f 1)" >> "$GITHUB_OUTPUT"
+          # GitHub Actions caches are immutable. Include the source revision so
+          # each run can restore the previous cache and save its newly compiled
+          # objects under a fresh key instead of silently discarding updates.
+          echo "value=ccache-Linux-arm64-$(cat .localversion-cache-hash)-$(sha256sum kernel-ci/msm8916.config Makefile Kconfig | sha256sum | cut -d ' ' -f 1)-${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
 
       - name: Clear compiler cache
         if: inputs.clean_build
@@ -145,6 +148,11 @@ jobs:
           mkdir -p output/kernel-only
           cp arch/arm64/boot/Image.gz output/kernel-only/
           for device in sp970 ufi001b ufi001c uz801; do
+            device_output="output/boot/${device}"
+            mkdir -p "$device_output"
+            cp arch/arm64/boot/Image.gz "$device_output/"
+            cp "arch/arm64/boot/dts/qcom/msm8916-handsome-openstick-${device}.dtb" "$device_output/"
+            ( cd "$device_output" && sha256sum * > SHA256SUMS )
             cp "arch/arm64/boot/dts/qcom/msm8916-handsome-openstick-${device}.dtb" output/kernel-only/
           done
           ( cd output/kernel-only && sha256sum * > SHA256SUMS )
@@ -285,6 +293,46 @@ jobs:
 
       - name: Upload UZ801 kernel image
         if: ${{ !inputs.only_build_kernel }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: uz801-boot-${{ github.sha }}
+          path: output/boot/uz801/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload kernel-only SP970 artifact
+        if: inputs.only_build_kernel
+        uses: actions/upload-artifact@v7
+        with:
+          name: sp970-boot-${{ github.sha }}
+          path: output/boot/sp970/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload kernel-only UFI001B artifact
+        if: inputs.only_build_kernel
+        uses: actions/upload-artifact@v7
+        with:
+          name: ufi001b-boot-${{ github.sha }}
+          path: output/boot/ufi001b/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload kernel-only UFI001C artifact
+        if: inputs.only_build_kernel
+        uses: actions/upload-artifact@v7
+        with:
+          name: ufi001c-boot-${{ github.sha }}
+          path: output/boot/ufi001c/
+          if-no-files-found: error
+          retention-days: 14
+          compression-level: 6
+
+      - name: Upload kernel-only UZ801 artifact
+        if: inputs.only_build_kernel
         uses: actions/upload-artifact@v7
         with:
           name: uz801-boot-${{ github.sha }}
