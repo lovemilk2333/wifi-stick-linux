@@ -1,0 +1,51 @@
+fixed_in	cve	commit	status	subject
+5.15.12	CVE-2022-4744	3cb5ae77799e8ed6ec3fec0b6b4cd07f01650cc5	APPLIED	tun: avoid double free in tun_free_netdev
+5.15.14	CVE-2021-4197	c6ebc35298848accb5e50c37fdb2490cf4690c92	APPLIED	cgroup: Use open-time credentials for process migraton perm checks
+5.15.16	CVE-2022-0185	e192ccc17ecf3e78a1c6fb81badf9b50bd791115	APPLIED	vfs: fs_context: fix up param length parsing in legacy_parse_param
+5.15.19	CVE-2022-24122	348a8501e6029f9308ea7675edfa645b5e669c9e	APPLIED	ucount:  Make get_ucount a safe get_user replacement
+5.15.20	CVE-2022-0492	4b1c32bfaa02255a5df602b41587174004996477	APPLIED	cgroup-v1: Require capabilities to set release_agent
+5.15.20	CVE-2022-1055	f36cacd6c933183c1a8827d5987cf2cfc0a44c76	APPLIED	net: sched: fix use-after-free in tc_new_tfilter()
+5.15.25	CVE-2022-0847	114e9f141822e6977633d322c1b03e89bd209932	APPLIED	lib/iov_iter: initialize "flags" in new pipe_buffer
+5.15.26	CVE-2022-25636	6c5d780469d6c3590729940e2be8a3bd66ea4814	APPLIED	netfilter: nf_tables_offload: incorrect flow offload action array size
+5.15.29	CVE-2022-0995	1b09f28f70a5046acd64138075ae3f095238b045	APPLIED	watch_queue: Fix filter limit check
+5.15.29	CVE-2022-1011	ca62747b38f59d4e75967ebf63c992de8852ca1b	APPLIED	fuse: fix pipe buffer lifetime for direct_io
+5.15.31	CVE-2022-20368	a055f5f2841f7522b44a2b1eccb1951b4b03d51a	APPLIED	net/packet: fix slab-out-of-bounds access in packet_recvmsg()
+5.15.32	CVE-2022-1016	fafb904156fbb8f1dd34970cd5223e00b47c33be	APPLIED	netfilter: nf_tables: initialize registers in nft_do_chain()
+5.15.33	CVE-2022-30594	b6d75218ff65f4d63c9cf4986f6c55666fb90a1a	APPLIED	ptrace: Check PTRACE_O_SUSPEND_SECCOMP permission on PTRACE_SEIZE
+5.15.34	CVE-2022-29582	ba7261af2b030ab2c06189be1fc77b273716839f	APPLIED	io_uring: fix race between timeout flush and removal
+5.15.36	CVE-2022-29581	ba9e9a794fd1689bf7e8a7452c55f3d3cbda7728	APPLIED	net/sched: cls_u32: fix netns refcount changes in u32_change()
+5.15.45	CVE-2022-1966	f692bcffd1f2ce5488d24fbcb8eab5f351abf79d	APPLIED	netfilter: nf_tables: disallow non-stateful expression in sets earlier
+5.15.45	CVE-2022-2959	cf2fbc56c478a34a68ff1fa6ad08460054dfd499	APPLIED	pipe: Fix missing lock in pipe_resize_ring()
+5.15.51	CVE-2023-2008	5b45535865d62633e3816ee30eb8d3213038dc17	APPLIED	udmabuf: add back sanity check
+5.15.54	CVE-2022-34918	c1784d2075138992b00c17ab4ffc6d855171fe6d	APPLIED	netfilter: nf_tables: stricter validation of element data
+5.15.61	CVE-2022-2586	faafd9286f1355c76fe9ac3021c280297213330e	APPLIED	netfilter: nf_tables: do not allow SET_ID to refer to another table
+5.15.61	CVE-2022-2588	57bbb691a93bd39d0644c5c879b354232d0e0eed	APPLIED	net_sched: cls_route: remove from list when handle is 0
+5.15.66	CVE-2022-20421	c2a4b5dc8fa71af73bab704d0cac42ac39767ed6	APPLIED	binder: fix UAF of ref->proc caused by race condition
+5.15.78	CVE-2023-3812	dcc79cf735b8ec4bedaa82c53bed8c62721c042b	APPLIED	net: tun: fix bugs for oversize packet when napi frags enabled
+5.15.82	CVE-2022-4378	48642f94311b0cf9667aa6833f9f5e3a87d2a0ce	APPLIED	proc: proc_skip_spaces() shouldn't think it is working on C strings
+5.15.89	CVE-2023-0179	a8acfe2c6fb99f9375a9325807a179cd8c32e6e3	APPLIED	netfilter: nft_payload: incorrect arithmetics when fetching VLAN header bits
+5.15.91	CVE-2023-0386	e91308e63710574c4b6a0cadda3e042a3699666e	APPLIED	ovl: fail on invalid uid/gid mapping at copy up
+5.15.95	CVE-2023-1281	becf55394f6acb60dd60634a1c797e73c747f9da	APPLIED	net/sched: tcindex: update imperfect hash filters respecting rcu
+5.15.109	CVE-2023-2163	e722ea6dae2cc042d1bb7090e2ef8456dd5a0e57	APPLIED	bpf: Fix incorrect verifier pruning due to missing register precision taints
+5.15.109	CVE-2023-31436	1ffc0e8105510cb826cb9d27ed1820a1131c82d4	APPLIED	net: sched: sch_qfq: prevent slab-out-of-bounds in qfq_activate_agg
+5.15.111	CVE-2023-32233	21c2a454486d5e9c1517ecca19266b3be3df73ca	APPLIED	netfilter: nf_tables: deactivate anonymous set from preparation phase
+5.15.116	CVE-2023-35788	45f47d2cf1142fbfe5d6fc39ad78f4aac058907c	APPLIED	net/sched: flower: fix possible OOB write in fl_set_geneve_opt()
+5.15.118	CVE-2023-3117	44ebe988cb38e720b91826f4d7c31692061ca04a	APPLIED	netfilter: nf_tables: incorrect error path handling with NFT_MSG_NEWRULE
+5.15.118	CVE-2023-3609	0e1098d72fa462944c68262e1b5cca045dcb555e	APPLIED	net/sched: cls_u32: Fix reference counter leak leading to overflow
+5.15.121	CVE-2023-35001	870dcc31c0cf47cb15a568ade4168dc644b3ccfb	APPLIED	netfilter: nf_tables: prevent OOB access in nft_byteorder_eval
+5.15.121	CVE-2023-3611	91d3554ab1fc2804c36a815c0f79502d727a41e6	APPLIED	net/sched: sch_qfq: account for stab overhead in qfq_enqueue
+5.15.121	CVE-2023-3776	5b55f2d6ef403fcda93ae4eb4d8c1ba164c66e92	APPLIED	net/sched: cls_fw: Fix improper refcount update leads to use-after-free
+5.15.123	CVE-2023-3777	10013f764ad2957de08968bd02870b6b7683e3f6	APPLIED	netfilter: nf_tables: skip bound chain on rule flush
+5.15.123	CVE-2023-4004	706ce3c81b5c8e262a8bcf116ea689d0710c3a13	APPLIED	netfilter: nft_set_pipapo: fix improper element removal
+5.15.126	CVE-2023-4128	262430dfc618509246e07acd26211cb4cca79ecc	APPLIED	net/sched: cls_u32: No longer copy tcf_result on update to avoid use-after-free
+5.15.126	CVE-2023-4206	79c3d81c9ad140957b081c91908d7e2964dc603f	APPLIED	net/sched: cls_route: No longer copy tcf_result on update to avoid use-after-free
+5.15.126	CVE-2023-4207	9edf7955025a602ab6bcc94d923c436e160a10e3	APPLIED	net/sched: cls_fw: No longer copy tcf_result on update to avoid use-after-free
+5.15.132	CVE-2023-42753	a9e6142e5f8f6ac7d1bca45c1b2b13b084ea9e14	APPLIED	netfilter: ipset: add the missing IP_SET_HASH_WITH_NET0 macro for ip_set_hash_netportnet.c
+5.15.132	CVE-2023-4623	4cf994d3f4ff42d604fae2b461bdd5195a7dfabd	APPLIED	net/sched: sch_hfsc: Ensure inner classes have fsc curve
+5.15.132	CVE-2023-4881	1ad7b189cc1411048434e8595ffcbe7873b71082	APPLIED	netfilter: nftables: exthdr: fix 4-byte stack OOB write
+5.15.132	CVE-2023-4921	6ea277b2c6263931798234e2eed892ecfbb85596	APPLIED	net: sched: sch_qfq: Fix UAF in qfq_dequeue()
+5.15.142	CVE-2023-6932	c4a00c47a140c39a0497a40b0f54cf4586a2b1d7	APPLIED	ipv4: igmp: fix refcnt uaf issue when receiving igmp query packet
+5.15.147	CVE-2023-6040	ab3a3aadb373b47a1f401c7626608b1b214cec9e	APPLIED	netfilter: nf_tables: Reject tables of unsupported family
+5.15.148	CVE-2023-52438	8ad4d580e8aff8de2a4d57c5930fcc29f1ffd4a6	APPLIED	binder: fix use-after-free in shinker's callback
+5.15.148	CVE-2024-1085	c9ed30eea4f7bfa2441235ce23abd339ee671f50	APPLIED_MANUAL	netfilter: nf_tables: check if catch-all set element is active in next generation
+5.15.149	CVE-2024-1086	960cf4f812530f01f6acc6878ceaa5404c06af7b	APPLIED_MANUAL	netfilter: nf_tables: reject QUEUE/DROP verdict parameters
