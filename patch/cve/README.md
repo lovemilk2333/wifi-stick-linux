@@ -12,10 +12,11 @@
 
 - 5.15.y 中修复的 LPE CVE 候选：1845 个（含非核心子系统）；
 - 核心/可触达候选：第一批 94 个，第二批 452 个；
-- 已合入：388 个
+- 已合入：417 个
   - 第一批 50 个（48 个稳定补丁直接应用，2 个手工应用）；
-  - 第二批 338 个（316 个直接应用，8 个适配 5.15.0 API，14 个手工移植）。
-- 尚未合入：113 个（见 `CONFLICTS.tsv`，多为依赖前置重构或目标功能在本内核配置中未启用）。
+  - 第二批 338 个（316 个直接应用，8 个适配 5.15.0 API，14 个手工移植）；
+  - 第三批 29 个（25 个借助上下文模糊匹配应用，3 个适配 5.15.0 API，1 个手工移植）；另有 1 个确认 5.15.0 本已修复。
+- 尚未合入：84 个（见 `CONFLICTS.tsv`，多为依赖前置重构或目标功能在本内核配置中未启用）。
 
 补丁来源：`https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git`（`linux-5.15.y`）。
 
@@ -43,12 +44,26 @@
 
 14 个手工移植的 CVE 见 `MANIFEST.tsv` 中 `status=MANUAL` 的行。
 
+### 第三批（29 个）
+
+在第二批基础上，对剩余冲突项使用上下文模糊匹配（`patch --fuzz`）重新尝试，并对少量 API 差异做适配：
+
+| CVE | 适配内容 |
+| --- | --- |
+| CVE-2023-52707 | 新增 `wake_up_pollfree()` / `__wake_up_pollfree()`（`POLLFREE` 支持） |
+| CVE-2024-57996 | `sfq_change()` 增加 `extack` 参数 |
+| CVE-2026-31407 | 回移 `NLA_BE16` / `NLA_BE32` 属性类型及范围校验 |
+| CVE-2025-21758 | 手工移植到 `mld_newpack()`，并新增 `dst_dev_rcu()` 供 `nf_queue` 使用 |
+| CVE-2024-38612 | 确认 5.15.0 已无条件调用 `genl_unregister_family()`，不受影响 |
+
 `MANIFEST.tsv` 为完整清单，`status` 取值：
 
 - `APPLIED`：稳定分支补丁直接应用；
+- `APPLIED_FUZZ`：借助上下文模糊匹配应用，已逐条人工核对落点；
 - `ADAPTED`：直接应用但需适配 5.15.0 API 或补充辅助函数；
 - `MANUAL`：因上下文差异手工移植；
-- `CONFLICT`：未合入（仅记录于 `CONFLICTS.tsv`）。
+- `CONFLICT`：未合入（仅记录于 `CONFLICTS.tsv`）；
+- `NOT_AFFECTED`：经核对该 CVE 在 5.15.0 中不存在。
 
 ## 补丁清单
 
@@ -105,6 +120,6 @@
 | 5.15.148 | CVE-2024-1085 | `c9ed30eea4f7` | netfilter: nf_tables: check if catch-all set element is active in next generation |
 | 5.15.149 | CVE-2024-1086 | `960cf4f81253` | netfilter: nf_tables: reject QUEUE/DROP verdict parameters |
 
-> 说明：本仓库基于 5.15.0，仍有 113 个已确认的 LPE CVE 未覆盖（见 `CONFLICTS.tsv`），
+> 说明：本仓库基于 5.15.0，仍有 84 个已确认的 LPE CVE 未覆盖（见 `CONFLICTS.tsv`），
 > 这些补丁大多依赖 5.15.y 后续版本中的前置重构，或目标功能在本内核配置中未启用。
 > 完整覆盖建议升级到最新的 5.15.y 稳定版本，或按 `MANIFEST.tsv` 的方式继续分批回合。
