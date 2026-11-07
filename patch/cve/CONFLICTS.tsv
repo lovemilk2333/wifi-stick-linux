@@ -1,43 +1,29 @@
 fixed_in	cve	commit	reason	subject
 5.15.8	CVE-2021-47505	60d311f9e6381d779d7d53371f87285698ecee24	CONFLICT	aio: fix use-after-free due to missing POLLFREE handling
-5.15.11	CVE-2021-47577	4b4e5bbf9386d4ec21d91c0cb0fd60b9bba778ec	CONFLICT	io-wq: check for wq exit after adding new worker task_work
-5.15.33	CVE-2022-49174	6a6beb074186a0452368a023a261c7d0eaebe838	CONFLICT	ext4: fix ext4_mb_mark_bb() with flex_bg with fast_commit
-5.15.61	CVE-2022-50095	9e255ed238fc67058df87b0388ad6d4b2ef3a2bd	CONFLICT	posix-cpu-timers: Cleanup CPU timers before freeing them during exec
 5.15.64	CVE-2022-50000	8fbdec08dbf7d7ab8e35bdc65eb4394bc82d1e26	CONFLICT	netfilter: flowtable: fix stuck flows on cleanup due to pending work
-5.15.82	CVE-2022-48999	25174d91e4a32a24204060d283bd5fa6d0ddf133	CONFLICT	ipv4: Handle attempt to delete multipath route when fib_info contains an nh reference
-5.15.83	CVE-2022-48991	1a3f8c6cd29d9078cc81b29d39d0e9ae1d6a03c3	CONFLICT	mm/khugepaged: invoke MMU notifiers in shmem/file collapse paths
 5.15.87	CVE-2022-50306	6969367c1500c15eddc38fda12f6d15518ad6d03	CONFLICT	ext4: fix potential out of bound read in ext4_fc_replay_scan()
 5.15.89	CVE-2023-52903	ed4629d1e968359fbb91d0a3780b1e86a2c08845	CONFLICT	io_uring: lock overflowing for IOPOLL
-5.15.93	CVE-2022-49738	97ccfffcc061e54ce87e4a51a40e2e9cb0b7076a	CONFLICT	f2fs: fix to do sanity check on i_extra_isize in is_alive()
 5.15.111	CVE-2023-54068	169134da419cb8ffbe3b0743bc24573e16952ea9	CONFLICT	f2fs: compress: fix to call f2fs_wait_on_page_writeback() in f2fs_write_raw_pages()
 5.15.126	CVE-2023-53577	b44d28b98f185d2f2348aa3c3636838c316f889e	CONFLICT	bpf, cpumap: Make sure kthread is running before map update returns
 5.15.128	CVE-2023-53500	44b3d40967009304617a7a6486490c1d6c12f899	CONFLICT	xfrm: fix slab-use-after-free in decode_session6
-5.15.132	CVE-2023-53354	d5790386595d06ea9decfd9ba5f1ea48cf09aa02	CONFLICT	skbuff: skb_segment, Call zero copy functions before using skbuff frags
 5.15.134	CVE-2023-52923	479a2cf5259347d6a1f658b0f791d27a34908e91	CONFLICT	netfilter: nf_tables: adapt set backend to use GC transaction API
 5.15.150	CVE-2024-27403	4c167af9f6b5ae4a5dbc243d5983c295ccc2e43c	CONFLICT	netfilter: nft_flow_offload: reset dst in route object after setting up flow
 5.15.153	CVE-2023-52447	37d98fb9c3144c0fddf7f6e99aece9927ac8dce6	CONFLICT	bpf: Defer the free of inner map when necessary
 5.15.153	CVE-2023-52656	d909d381c3152393421403be4b6435f17a2378b4	CONFLICT	io_uring: drop any code related to SCM_RIGHTS
 5.15.153	CVE-2024-27034	7d420eaaa18ec8e2bb4eeab8c65c00492ef6f416	CONFLICT	f2fs: compress: fix to cover normal cluster write with cp_rwsem
-5.15.154	CVE-2024-26960	2da5568ee222ce0541bfe446a07998f92ed1643e	CONFLICT	mm: swap: fix race between free_swap_and_cache() and swapoff()
-5.15.155	CVE-2024-35897	6cbbe1ba76ee7e674a86abd43009b083a45838cb	CONFLICT	netfilter: nf_tables: discard table flag update with pending basechain deletion
-5.15.156	CVE-2024-26923	e76c2678228f6aec74b305ae30c9374cc2f28a51	CONFLICT	af_unix: Fix garbage collector racing against connect()
 5.15.157	CVE-2024-26924	7a1679e2d9bfa3b5f8755c2c7113e54b7d42bd46	CONFLICT	netfilter: nft_set_pipapo: do not free live element
 5.15.161	CVE-2024-38612	1a63730fb315bb1bab97edd69ff58ad45e04bb01	NOT_AFFECTED (already fixed in 5.15.0)	ipv6: sr: fix invalid unregister error path
-5.15.162	CVE-2024-42068	a359696856ca9409fb97655c5a8ef0f549cb6e03	CONFLICT	bpf: Take return from set_memory_ro() into account with bpf_prog_lock_ro()
 5.15.165	CVE-2024-27397	0d40e8cb1d1f56a994cdd2e015af622fdca9ed4d	CONFLICT	netfilter: nf_tables: use timestamp to check for set element timeout
 5.15.165	CVE-2024-42318	916c648323fa53b89eedb34a0988ddaf01406117	CONFLICT	landlock: Don't lose track of restrictions on cred_transfer
 5.15.168	CVE-2024-47690	e8d64f598eeb079c42a52deaa3a91312c736a49d	CONFLICT	f2fs: get rid of online repaire on corrupted directory
-5.15.168	CVE-2024-47701	be2e9b111e2790962cc66a177869b4e9717b4e29	CONFLICT	ext4: avoid OOB when system.data xattr changes underneath the filesystem
 5.15.179	CVE-2025-21756	e48fcb403c2d0e574c19683f09399ab4cf67809c	CONFLICT	vsock: Keep the binding until socket destruction
 5.15.181	CVE-2025-23142	0f7df4899299ce4662e5f95badb9dbc57cc37fa5	CONFLICT	sctp: detect and prevent references to a freed transport in sendmsg
 5.15.182	CVE-2024-26739	9d3ef89b6a5e9f2e940de2cef3d543be0be8dec5	CONFLICT	net/sched: act_mirred: don't override retval if we already lost the skb
 5.15.185	CVE-2025-38004	fbd8fdc2b218e979cfe422b139b8f74c12419d1f	CONFLICT	can: bcm: add locking for bcm_op runtime updates
 5.15.186	CVE-2024-57883	8410996eb6fea116fe1483ed977aacf580eee7b4	CONFLICT	mm: hugetlb: independent PMD page table shared count
 5.15.186	CVE-2025-38084	366298f2b04d2bf1f2f2b7078405bdf9df9bd5d0	CONFLICT	mm/hugetlb: unshare page tables during VMA split, not before
-5.15.186	CVE-2025-38085	a3d864c901a300c295692d129159fc3001a56185	CONFLICT	mm/hugetlb: fix huge_pmd_unshare() vs GUP-fast race
 5.15.186	CVE-2025-38193	956b5aebb349449b38d920d444ca1392d43719d1	CONFLICT	net_sched: sch_sfq: reject invalid perturb period
 5.15.189	CVE-2023-53836	65ad600b9bde68d2d28709943ab00b51ca8f0a1d	CONFLICT	bpf, sockmap: Fix skb refcnt race after locking changes
-5.15.192	CVE-2023-52935	abdf3c33918185c3e8ffeb09ed3e334b3d7df47c	CONFLICT	mm/khugepaged: fix ->anon_vma race
 5.15.192	CVE-2025-38502	c1c74584b9b4043c52e41fec415226e582d266a3	CONFLICT	bpf: Fix oob access in cgroup local storage
 5.15.194	CVE-2025-38236	523edfed4f68b7794d85b9ac828c5f8f4442e4c5	CONFLICT	af_unix: Don't leave consecutive consumed OOB skbs.
 5.15.194	CVE-2025-39988	72de0facc50afdb101fb7197d880407f1abfc77f	CONFLICT	can: etas_es58x: populate ndo_change_mtu() to prevent buffer overflow
@@ -48,38 +34,25 @@ fixed_in	cve	commit	reason	subject
 5.15.203	CVE-2026-23351	c0f1f85097ac2b6e7d750fe4d05807985cd3fd3a	CONFLICT	netfilter: nft_set_pipapo: split gc into unlink and reclaim phase
 5.15.203	CVE-2026-23410	d9d8560b9b7932f8cffc4c068c14289220900f79	CONFLICT	apparmor: fix race on rawdata dereference
 5.15.203	CVE-2026-23411	667df93769c02ff581c77d2d8f162147e719c557	CONFLICT	apparmor: fix race between freeing data and fs accessing it
-5.15.203	CVE-2026-23458	9821b47f669eb82791fa0b1a6ebaf9aa219bea72	CONFLICT	netfilter: ctnetlink: fix use-after-free in ctnetlink_dump_exp_ct()
-5.15.203	CVE-2026-43060	3da0b946835f33bf36b459ead764c61a761e689b	CONFLICT	netfilter: nft_ct: drop pending enqueued packets on removal
 5.15.203	CVE-2026-43329	ead66c77303f760f6c30be96e2e20d5a77cef614	CONFLICT	netfilter: flowtable: strictly check for maximum number of actions
 5.15.209	CVE-2025-38250	90dee0a0ff84fac8accd5be98412b3819f667149	CONFLICT	Bluetooth: hci_core: Fix use-after-free in vhci_flush()
 5.15.209	CVE-2026-46275	e2d19969c8d9198ecc3090bcd5312ecd503a3339	CONFLICT	Bluetooth: hci_uart: fix UAFs and race conditions in close and init paths
 5.15.209	CVE-2026-46319	a2e0c045c87aa252eb61412e67dd91f2c2b19f81	CONFLICT	net/sched: act_ct: Only release RCU read lock after ct_ft
 5.15.209	CVE-2026-53011	3471874578160a28c171a607fa069f24062634b8	CONFLICT	net/sched: taprio: fix use-after-free in advance_sched() on schedule switch
-5.15.209	CVE-2026-53096	4a3d0fe30b907ff324b1b49756f7e713d67f3645	CONFLICT	bpf: Use RCU-safe iteration in dev_map_redirect_multi() SKB path
 5.15.209	CVE-2026-63865	452a927cddcd67478d030e646f41cb904a93156f	CONFLICT	bpf: Drop task_to_inode and inet_conn_established from lsm sleepable hooks
 5.15.210	CVE-2026-52917	b2be72d401833194917e44fbd8d8144bb4f2db16	CONFLICT	sctp: diag: reject stale associations in dump_one path
 5.15.210	CVE-2026-63914	6df8157547347b5257bf640a0ae3dfc4411e06cd	CONFLICT	xfrm: route MIGRATE notifications to caller's netns
-5.15.210	CVE-2026-64126	0d5104390b445e7bd664ad583837e4c04d892c9d	CONFLICT	Bluetooth: MGMT: validate Add Extended Advertising Data length
-5.15.212	CVE-2026-63817	fcc051d377a9701a452e7663a1a8223c26225df9	CONFLICT	f2fs: validate compress cache inode only when enabled
-5.15.212	CVE-2026-64375	65bf0d2b6e914f1448d6a2fde193dcf60936a651	CONFLICT	proc: protect ptrace_may_access() with exec_update_lock (FD links)
 5.15.212	CVE-2026-64413	42bef500d07b5769d916e9122a3e3fa3fd2245ef	CONFLICT	netfilter: ebtables: zero chainstack array
 5.15.212	CVE-2026-72122	ffa80a2af27c97453861a5128e537214a31cd18a	CONFLICT	can: bcm: fix lockless bound/ifindex race and silent RX_SETUP failure
 5.15.212	CVE-2026-72126	59672aa4bcd8d32172c1ff6a179583981d6acabc	CONFLICT	can: isotp: use unconditional synchronize_rcu() in isotp_release()
 5.15.212	CVE-2026-72136	bdfd1c21d90e628a58a9de79e024cdfcbedfa15c	CONFLICT	xfrm: xfrm_interface: require CAP_NET_ADMIN in the device netns for changelink
-5.15.212	CVE-2026-72347	d8ce63d928b457fba7ed1e302492dfd32293671c	CONFLICT	netfilter: xt_connmark: reject invalid shift parameters
-5.15.212	CVE-2026-72350	b33b44250d57ab0e5a1e2571b5285fb0d0a7f382	CONFLICT	netfilter: xt_u32: reject invalid shift counts
 5.15.216	CVE-2026-72114	204f2b232717bc470ddb9e1da1d27dd9c6ef0caa	CONFLICT	can: bcm: validate frame length in bcm_rx_setup() for RTR replies
 5.15.216	CVE-2026-72116	ca829677ffa2de5d79e06366e19ac1e4f5cc78dd	CONFLICT	can: bcm: fix stale rx/tx ops after device removal
 5.15.216	CVE-2026-72125	8e018f4335590460ebcf0c2b493ed38ba1a35204	CONFLICT	can: isotp: fix use-after-free race with concurrent NETDEV_UNREGISTER
 5.15.217	CVE-2026-64585	d12f6add48f2da15c8c8281961d3faad804c76cf	CONFLICT	can: esd_usb: kill anchored URBs before freeing netdevs
 5.15.217	CVE-2026-72252	0ab7b1802f63ca5b288ea59acb467830b83abd6b	CONFLICT	netfilter: nft_set_pipapo: don't leak bad clone into future transaction
 5.15.218	CVE-2026-74582	78a47127e33c340bc6d38dcc4552a094b4f5cc77	CONFLICT	packet: use consistent hard_header_len in non-ring send paths
-5.15.218	CVE-2026-74663	a627d36c2a94e18c8c105ae68008786dfd85592e	CONFLICT	net/sched: reject overly deep qdisc hierarchies
-5.15.218	CVE-2026-74668	2a73b2c37ee3060a880b53cd24783d93fc7be5f8	CONFLICT	packet: use consistent hard_header_len in TX_RING send path
-5.15.221	CVE-2023-52676	4ba97610399e83d29d1086a0827d33172539b49b	CONFLICT	bpf: Guard stack limits against 32bit overflow
 5.15.221	CVE-2025-40123	dc4f348952173beb8ceb15be30b249276eccb605	CONFLICT	bpf: Enforce expected_attach_type for tailcall compatibility
 5.15.222	CVE-2026-89560	39fc16597715125529df8f94e016fb00836ee3c1	CONFLICT	landlock: Require LANDLOCK_ACCESS_FS_MAKE_REG for whiteout creation
 5.15.224	CVE-2022-49622	453a67af8bd77463b33cb0336dd7f2341e332d29	CONFLICT	netfilter: nf_tables: avoid skb access on nf_stolen
-5.15.224	CVE-2026-23272	022effa9c54903858e443b1225370e6c758d03f6	CONFLICT	netfilter: nf_tables: unconditionally bump set->nelems before insertion
 5.15.224	CVE-2026-99213	5f2ab77028602a22f0cc33cac063a313787cbeae	CONFLICT	vsock: treat TCP_CLOSING as once-established
-5.15.224	CVE-2026-99224	a49e6c9a1a5b3457c946a8efb616ce13b4ca8194	CONFLICT	keys: Protect the type name while describing a key

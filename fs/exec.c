@@ -38,6 +38,7 @@
 #include <linux/sched/coredump.h>
 #include <linux/sched/signal.h>
 #include <linux/sched/numa_balancing.h>
+#include <linux/posix-timers.h>
 #include <linux/sched/task.h>
 #include <linux/pagemap.h>
 #include <linux/perf_event.h>
@@ -1292,6 +1293,9 @@ int begin_new_exec(struct linux_binprm * bprm)
 	bprm->mm = NULL;
 
 #ifdef CONFIG_POSIX_TIMERS
+	spin_lock_irq(&me->sighand->siglock);
+	posix_cpu_timers_exit(me);
+	spin_unlock_irq(&me->sighand->siglock);
 	exit_itimers(me->signal);
 	flush_itimer_signals();
 #endif

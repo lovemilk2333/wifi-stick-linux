@@ -416,3 +416,29 @@ fixed_in	cve	commit	status	subject
 5.15.224	CVE-2026-99123	bda841af86cdfe7fcf4a2f4db22e27f1b852b1ff	APPLIED_FUZZ	vsock/virtio: validate packet source for connected sockets
 5.15.224	CVE-2026-99167	fd01abed2568209f7daaf60e5ee68ae4a4744f48	APPLIED	net/sched: fix use-after-free in __tcf_action_put()
 5.15.224	CVE-2026-99203	7cdbfa22a7e270b155ddb958b1583a999c0c8abb	APPLIED	pipe: preserve existing fasync readers on writer setup failure
+5.15.212	CVE-2026-72347	d8ce63d928b457fba7ed1e302492dfd32293671c	MANUAL	netfilter: xt_connmark: reject invalid shift parameters
+5.15.212	CVE-2026-72350	b33b44250d57ab0e5a1e2571b5285fb0d0a7f382	MANUAL	netfilter: xt_u32: reject invalid shift counts
+5.15.61	CVE-2022-50095	9e255ed238fc67058df87b0388ad6d4b2ef3a2bd	MANUAL	posix-cpu-timers: Cleanup CPU timers before freeing them during exec
+5.15.155	CVE-2024-35897	6cbbe1ba76ee7e674a86abd43009b083a45838cb	MANUAL	netfilter: nf_tables: discard table flag update with pending basechain deletion
+5.15.224	CVE-2026-23272	022effa9c54903858e443b1225370e6c758d03f6	MANUAL	netfilter: nf_tables: unconditionally bump set->nelems before insertion
+5.15.154	CVE-2024-26960	2da5568ee222ce0541bfe446a07998f92ed1643e	MANUAL	mm: swap: fix race between free_swap_and_cache() and swapoff()
+5.15.156	CVE-2024-26923	e76c2678228f6aec74b305ae30c9374cc2f28a51	MANUAL	af_unix: Fix garbage collector racing against connect()
+5.15.186	CVE-2025-38085	a3d864c901a300c295692d129159fc3001a56185	MANUAL	mm/hugetlb: fix huge_pmd_unshare() vs GUP-fast race
+5.15.33	CVE-2022-49174	6a6beb074186a0452368a023a261c7d0eaebe838	MANUAL	ext4: fix ext4_mb_mark_bb() with flex_bg with fast_commit
+5.15.212	CVE-2026-63817	fcc051d377a9701a452e7663a1a8223c26225df9	MANUAL	f2fs: validate compress cache inode only when enabled
+5.15.168	CVE-2024-47701	be2e9b111e2790962cc66a177869b4e9717b4e29	MANUAL	ext4: avoid OOB when system.data xattr changes underneath the filesystem
+5.15.210	CVE-2026-64126	0d5104390b445e7bd664ad583837e4c04d892c9d	MANUAL	Bluetooth: MGMT: validate Add Extended Advertising Data length
+5.15.82	CVE-2022-48999	25174d91e4a32a24204060d283bd5fa6d0ddf133	MANUAL	ipv4: Handle attempt to delete multipath route when fib_info contains an nh reference
+5.15.11	CVE-2021-47577	4b4e5bbf9386d4ec21d91c0cb0fd60b9bba778ec	APPLIED_FUZZ	io-wq: check for wq exit after adding new worker task_work
+5.15.83	CVE-2022-48991	1a3f8c6cd29d9078cc81b29d39d0e9ae1d6a03c3	MANUAL	mm/khugepaged: invoke MMU notifiers in shmem/file collapse paths
+5.15.192	CVE-2023-52935	abdf3c33918185c3e8ffeb09ed3e334b3d7df47c	MANUAL	mm/khugepaged: fix ->anon_vma race
+5.15.132	CVE-2023-53354	d5790386595d06ea9decfd9ba5f1ea48cf09aa02	APPLIED_FUZZ	skbuff: skb_segment, Call zero copy functions before using skbuff frags
+5.15.218	CVE-2026-74663	a627d36c2a94e18c8c105ae68008786dfd85592e	MANUAL	net/sched: reject overly deep qdisc hierarchies
+5.15.162	CVE-2024-42068	a359696856ca9409fb97655c5a8ef0f549cb6e03	MANUAL	bpf: Take return from set_memory_ro() into account with bpf_prog_lock_ro()
+5.15.93	CVE-2022-49738	97ccfffcc061e54ce87e4a51a40e2e9cb0b7076a	APPLIED_FUZZ	f2fs: fix to do sanity check on i_extra_isize in is_alive()
+5.15.221	CVE-2023-52676	4ba97610399e83d29d1086a0827d33172539b49b	APPLIED_FUZZ	bpf: Guard stack limits against 32bit overflow
+5.15.209	CVE-2026-53096	4a3d0fe30b907ff324b1b49756f7e713d67f3645	APPLIED_FUZZ	bpf: Use RCU-safe iteration in dev_map_redirect_multi() SKB path
+5.15.203	CVE-2026-23458	9821b47f669eb82791fa0b1a6ebaf9aa219bea72	APPLIED_FUZZ	netfilter: ctnetlink: fix use-after-free in ctnetlink_dump_exp_ct()
+5.15.203	CVE-2026-43060	3da0b946835f33bf36b459ead764c61a761e689b	APPLIED_FUZZ	netfilter: nft_ct: drop pending enqueued packets on removal
+5.15.218	CVE-2026-74668	2a73b2c37ee3060a880b53cd24783d93fc7be5f8	APPLIED_FUZZ	packet: use consistent hard_header_len in TX_RING send path
+5.15.212	CVE-2026-64375	65bf0d2b6e914f1448d6a2fde193dcf60936a651	APPLIED_FUZZ	proc: protect ptrace_may_access() with exec_update_lock (FD links)

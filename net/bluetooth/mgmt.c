@@ -8039,8 +8039,14 @@ static int add_ext_adv_data(struct sock *sk, struct hci_dev *hdev, void *data,
 	int err = 0;
 	struct mgmt_pending_cmd *cmd;
 	struct hci_request req;
+	u16 expected_len;
 
 	BT_DBG("%s", hdev->name);
+
+	expected_len = struct_size(cp, data, cp->adv_data_len + cp->scan_rsp_len);
+	if (expected_len != data_len)
+		return mgmt_cmd_status(sk, hdev->id, MGMT_OP_ADD_EXT_ADV_DATA,
+				       MGMT_STATUS_INVALID_PARAMS);
 
 	hci_dev_lock(hdev);
 
