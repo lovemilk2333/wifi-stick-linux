@@ -16,8 +16,10 @@ The workflow packages the same kernel and root filesystem for these devices:
 - `ufi001c`
 - `uz801`
 
-The artifact contains one shared `rootfs.img`, four `<device>-boot.img` files,
-and `SHA256SUMS`.
+A normal build produces one shared `rootfs.img` plus four `<device>-boot.img`
+files, each with `SHA256SUMS`. With `only_build_kernel` the boot images are
+still built (the root filesystem is downloaded for its initrd), but the shared
+`rootfs.img` is not produced or uploaded.
 
 ## QEMU test kernel
 
