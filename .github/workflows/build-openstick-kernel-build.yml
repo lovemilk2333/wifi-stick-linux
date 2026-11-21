@@ -80,6 +80,44 @@ jobs:
           git apply --check patch/rndis-ms-iad_desc.patch
           git apply patch/rndis-ms-iad_desc.patch
 
+      - name: Apply CVE patches
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          patches=(patch/cve/*.patch)
+          if ((${#patches[@]} == 0)); then
+            echo "No CVE patches found" >&2
+            exit 1
+          fi
+
+          for patch_file in "${patches[@]}"; do
+            patch_id="${patch_file##*/}"
+            patch_id="${patch_id%.patch}"
+
+            # Parse every patch before deciding whether its change is already in
+            # the checked-out source.
+            git apply --stat "$patch_file" >/dev/null
+
+            if git apply --check "$patch_file" >/dev/null 2>&1; then
+              echo "Applying $patch_id"
+              git apply "$patch_file"
+            elif git apply --reverse --check "$patch_file" >/dev/null 2>&1; then
+              echo "$patch_id is already applied"
+            else
+              status="$(awk -F '\t' -v cve="$patch_id" '$2 == cve { print $4; exit }' patch/cve/MANIFEST.tsv)"
+              case "$status" in
+                APPLIED|APPLIED_FUZZ|ADAPTED|APPLIED_MANUAL|MANUAL)
+                  echo "$patch_id is recorded as $status and already integrated in the source"
+                  ;;
+                *)
+                  echo "Cannot apply $patch_file, and it is not recorded as already integrated" >&2
+                  git apply --check "$patch_file" || true
+                  exit 1
+                  ;;
+              esac
+            fi
+          done
+
       - name: Calculate compiler cache key
         id: cache-key
         env:
